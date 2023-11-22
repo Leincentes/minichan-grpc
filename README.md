@@ -384,7 +384,7 @@ The **`insert`** method facilitates the insertion of one or more records into a 
 ## Usage Example:
 
 ```php
-// insert sample
+// insert 
 $inserted = insert("your_table", ["column1" => "value1", "column2" => "value2"]);
 
 // with specified primary key
@@ -416,7 +416,7 @@ The **`update`** method is employed to modify records in a specified table based
 ## Usage Example:
 
 ```php
-// update sample
+// update 
 $updated = update("your_table", ["column1" => "new_value"], ["column2" => "value2"]);
 
 // with specified condition
@@ -445,7 +445,7 @@ The **`delete`** method is utilized to remove records from a specified table bas
 ## Usage Example:
 
 ```php
-// delete sample
+// delete 
 $deleted = delete("your_table", ["column1" => "value1"]);
 
 // with specified condition
@@ -618,6 +618,95 @@ $averageValue = avg("your_table", "column3", ["column4" => "value"]);
 $totalSum = sum("your_table", "column5", ["column6" => "value"]);
 
 ```
+
+# MIDDLEWARE
+The **`ServiceHandler`** middleware is designed to handle GRPC service requests. It processes incoming requests, executes the corresponding service method, and generates a response with appropriate context and output. The middleware is responsible for managing errors, logging relevant information, and ensuring a standardized response structure.
+
+## Methods
+
+### `process(\Minichan\Grpc\Request $request, \Minichan\Grpc\RequestHandlerInterface $handler): \Minichan\Grpc\MessageInterface`
+
+**Description:**
+
+Processes the incoming GRPC service request, executes the corresponding service method, and generates a response.
+
+**Parameters:**
+
+- `$request (\Minichan\Grpc\Request):`
+  The incoming GRPC request.
+
+- `$handler (\Minichan\Grpc\RequestHandlerInterface):`
+  The request handler interface.
+
+**Returns:**
+
+- `\Minichan\Grpc\MessageInterface:`
+  The GRPC response message.
+
+## Exception Handling
+
+### `GRPCException`
+
+- Captures `GRPCException` and logs the error details.
+- Updates the context with the error status and message.
+- Sets the response output to an empty string.
+
+### `Swoole\Exception`
+
+- Captures `\Swoole\Exception` (Swoole-specific exceptions) and logs the error details.
+- Updates the context with the Swoole error status and message.
+- Sets the response output to an empty string.
+
+### Other Exceptions (`Throwable`)
+
+- Captures general exceptions (implementing `Throwable`) and rethrows as `InvokeException`.
+- Logs the error details.
+- The `InvokeException` includes the original exception as the previous exception.
+
+## Context Management
+
+- Extracts service, method, and context information from the incoming request.
+- Checks if the requested service is available and throws a `NotFoundException` if not.
+- Updates the context with a successful status (`Status::OK`) after handling the request.
+
+## Logging
+
+- Utilizes the `Util::log` method for logging errors with appropriate log levels.
+- Logs error messages, error codes, and stack traces for better diagnostics.
+
+## Response Generation
+
+- Returns a `Response` object encapsulating the updated context and output.
+
+## The ServiceHandler being Constructed
+The **`ServiceHandler`** is already will have it's instance in the StackHandler in Server that you will find in the Grpc folder Server.php file.
+```php
+// Server.php
+    /**
+     * Server constructor.
+     *
+     * @param string $host
+     * @param int    $port
+     * @param int    $mode
+     * @param int    $sockType
+     */
+    public function __construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)
+    {
+        $this->host     = $host;
+        $this->port     = $port;
+        $this->mode     = $mode;
+        $this->sockType = $sockType;
+
+        $server = new \Swoole\Http\Server($this->host, $this->port, $this->mode, $this->sockType);
+        $server->on('start', function () {
+            Util::log(SWOOLE_LOG_INFO, "GRPC Server Started: {$this->host}:{$this->port}");
+        });
+        $this->server   = $server;
+        $this->handler  = (new StackHandler())->add(new ServiceHandler());
+    }
+```
+
+
 
 ## Troubleshooting
 If you encounter issues while using , consider the following steps:
