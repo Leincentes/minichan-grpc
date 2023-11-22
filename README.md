@@ -1,4 +1,4 @@
-## grpc-proto-v1
+## minichan-v1
 
 A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code generator, server, and client components.
 
