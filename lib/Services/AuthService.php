@@ -3,10 +3,7 @@
 declare(strict_types=1);
 namespace Minichan\Services;
 
-use Minichan\Config\Constant;
-use Minichan\Config\Status;
 use Minichan\Database\Database;
-use Minichan\Exception\CancelledException;
 use PHP\UserService\User;
 use PHP\UserService\UserResponse;
 use PHP\UserService\UserServiceInterface;
@@ -17,12 +14,13 @@ class AuthService implements UserServiceInterface
     private Database $db;
     public function __construct() {
         $this->response = new UserResponse();
+        // dynamic instance that depends on you
         $this->db = new Database([
             'type' => 'mysql',
             'host' => 'localhost',
             'database' => 'user_auth',
-            'username' => 'root',
-            'password' => 'eraMysql13()!'
+            'username' => 'tester',
+            'password' => 'testeR123()!'
         ]);
     }
     /**

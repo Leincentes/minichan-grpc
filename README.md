@@ -20,7 +20,7 @@ It needs to be turned on --enable-http2
 
 [Protoc](https://github.com/protocolbuffers/protobuf) is a code generator for protobuf data structures, tasked with converting .proto files into language-specific classes and structs for program implementation.
 
-[grpc]() is a protoc plug-in created by the grpc library, designed to generate server and client code for services.
+[minichan]() is a protoc plug-in created by the grpc library, designed to generate server and client code for services.
 
 ## GENERATE PHP CODE via .proto
 
@@ -185,6 +185,7 @@ Co::set(['log_level' => SWOOLE_LOG_ERROR]);
 Co::set(['log_level' => SWOOLE_LOG_DEBUG]);
 
 Co::create(function () {
+    // uncomment - comment to test all the service available
     $method = '/PHP.UserService.UserService/RegisterUser';
     // $method = '/PHP.UserService.UserService/Login';
     // $method = '/PHP.UserService.UserService/UpdateUser';
