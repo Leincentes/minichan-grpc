@@ -220,6 +220,7 @@ php lib/cli.php help
 ```
 
 Command Reference <a name="command-reference"></a>
+
 generate:cli <a name="generate-cli"></a>
 Generate a new CLI class or interface.
 ```bash
