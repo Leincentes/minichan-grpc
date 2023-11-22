@@ -4,7 +4,9 @@ declare(strict_types= 1);
 use Minichan\Config\Config;
 use Minichan\Config\Constant;
 
-require_once './vendor/autoload.php';
+! defined('BASE_PATH') && define('BASE_PATH', dirname(__DIR__, 1));
+
+require_once BASE_PATH . '/vendor/autoload.php';
 
 // Create a gRPC server instance with the specified host, port, and Swoole mode
 $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_PORT, SWOOLE_BASE))

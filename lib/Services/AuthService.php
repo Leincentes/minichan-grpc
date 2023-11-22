@@ -121,13 +121,10 @@ class AuthService implements UserServiceInterface
      */
     public function GetUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
 
-        $users = $this->db->select('users', ['username', 'password'], [
-            'username' => $request->getUsername(),
-        ]);
+        $users = $this->db->get('users', ['username', 'password'], ['username' => $request->getUsername()]);
 
-        if (count($users) > 0) {
-            $user = $users[0];
-            return $this->response->setMessage('user: ' . $user['username']);
+        if($users) {
+            return $this->response->setMessage('user: ' . $users['username']);
         } else {
             throw new \Minichan\Exception\InvokeException("user does not exist");
         }

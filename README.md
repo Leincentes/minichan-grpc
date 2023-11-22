@@ -624,7 +624,11 @@ The **`ServiceHandler`** middleware is designed to handle GRPC service requests.
 
 ## Methods
 
-### `process(\Minichan\Grpc\Request $request, \Minichan\Grpc\RequestHandlerInterface $handler): \Minichan\Grpc\MessageInterface`
+```php
+    public function process(\Minichan\Grpc\Request $request, \Minichan\Grpc\RequestHandlerInterface $handler): \Minichan\Grpc\MessageInterface {
+        // implementation logic
+    }
+```
 
 **Description:**
 
