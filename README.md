@@ -293,7 +293,7 @@ Class declaration
         // Class implementation...
     }
 ```
-'getServices' Method
+**`getServices` Method**
 ```php
     /**
      * Get an array of gRPC services to be registered.
@@ -309,7 +309,7 @@ Class declaration
 ```
 The 'getServices' method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
 
-'getMiddlewares' Method
+**`getMiddlewares` Method**
 ```php
     /**
      * Get an array of middlewares to be added.
