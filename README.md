@@ -270,3 +270,59 @@ If you encounter issues while using , consider the following steps:
 1. Check the Command Syntax: Ensure that you are using the correct syntax for the command.
 
 2. Review Error Messages: Examine any error messages displayed in the console for clues about the issue.
+
+## Config
+The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
+
+Class declaration
+```php
+    declare(strict_types=1);
+
+    namespace Minichan\Config;
+
+    use Minichan\Middleware\LoggingMiddleware;
+    use Minichan\Middleware\ServiceHandler;
+    use Minichan\Middleware\TraceMiddleware;
+    use Minichan\Services\AuthService;
+
+    /**
+     * Configuration class for defining gRPC services and middlewares.
+     */
+    class Config
+    {
+        // Class implementation...
+    }
+```
+'getServices' Method
+```php
+    /**
+     * Get an array of gRPC services to be registered.
+     *
+     * @return array
+     */
+    public static function getServices(): array
+    {
+        return [
+            AuthService::class,
+        ];
+    }
+```
+The 'getServices' method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
+
+'getMiddlewares' Method
+```php
+    /**
+     * Get an array of middlewares to be added.
+     *
+     * @return array
+     */
+    public static function getMiddlewares(): array
+    {
+        return [
+            new LoggingMiddleware(),
+            new TraceMiddleware(),
+        ];
+    }
+```
+The 'getMiddlewares' method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
+
