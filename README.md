@@ -1,4 +1,4 @@
-## minichan-v1
+# minichan-v1
 
 A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code generator, server, and client components.
 
@@ -205,7 +205,7 @@ Co::create(function () {
 ```
 
 
-## CLI
+# CLI
 A command-line interface for generating various components in your project. This tool aims to streamline the process of creating classes, interfaces, and other components in your project.
 
 ## Usage
@@ -271,7 +271,7 @@ If you encounter issues while using , consider the following steps:
 
 2. Review Error Messages: Examine any error messages displayed in the console for clues about the issue.
 
-## Config
+# Config
 The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
 
 **`Class` declaration**
@@ -326,8 +326,8 @@ The 'getServices' method is responsible for returning an array of gRPC services 
 ```
 The 'getMiddlewares' method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
 
-## DATABASE
-# Method Description:
+# DATABASE
+## Method Description:
 
 The **`select`** method is designed to execute a SELECT query on a specified table, offering flexibility through various parameter combinations.
 
