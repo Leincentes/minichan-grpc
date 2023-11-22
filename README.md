@@ -274,7 +274,7 @@ If you encounter issues while using , consider the following steps:
 ## Config
 The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
 
-Class declaration
+**`Class` declaration**
 ```php
     declare(strict_types=1);
 
@@ -325,4 +325,42 @@ The 'getServices' method is responsible for returning an array of gRPC services 
     }
 ```
 The 'getMiddlewares' method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
+
+## DATABASE
+# Method Description:
+
+The **`select`** method is designed to execute a SELECT query on a specified table, offering flexibility through various parameter combinations.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$columns (array):**
+  An array of columns to be selected.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+- **$callback (callable|null):**
+  A callback function that can be applied to each row of the result set (optional).
+
+## Return Value:
+
+- If no callback is provided:
+  - The method returns an array containing the selected rows.
+
+- If a callback is provided:
+  - The method returns null.
+
+## Usage:
+
+```php
+// Example without callback
+$result = select("your_table", ["column1", "column2"], ["column3" => "value"]);
+
+// Example with callback
+select("your_table", ["column1", "column2"], ["column3" => "value"], function ($row) {
+    // Custom processing for each row
+});
 
