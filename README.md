@@ -267,7 +267,7 @@ php lib/cli.php generate:services [ServicesName] [Interface|Class]
 # Config
 The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
 
-**`Class` declaration**
+**`Class` Declaration**
 ```php
     declare(strict_types=1);
 
@@ -286,7 +286,8 @@ The Config class is a configuration class within the Minichan\Config namespace. 
         // Class implementation...
     }
 ```
-**`getServices` Method**
+The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
+
 ```php
     /**
      * Get an array of gRPC services to be registered.
@@ -300,9 +301,9 @@ The Config class is a configuration class within the Minichan\Config namespace. 
         ];
     }
 ```
-The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
 
-**`getMiddlewares` Method**
+The **`getMiddlewares`** method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
+
 ```php
     /**
      * Get an array of middlewares to be added.
@@ -317,7 +318,6 @@ The **`getServices`** method is responsible for returning an array of gRPC servi
         ];
     }
 ```
-The **`getMiddlewares`** method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
 
 # DATABASE
 A minimal PHP database helper for ease development.
@@ -679,7 +679,7 @@ Processes the incoming GRPC service request, executes the corresponding service 
 - Returns a `Response` object encapsulating the updated context and output.
 
 ## The ServiceHandler being Constructed
-The **`ServiceHandler`** is already will have it's instance in the StackHandler in Server that you will find in the Grpc folder Server.php file.
+The **`ServiceHandler`** already have it's instance in the StackHandler in Server, that you will find in the Grpc folder Server.php file.
 ```php
 // Server.php
     /**
