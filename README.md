@@ -715,10 +715,6 @@ The Server class is a crucial component of the Minichan application, responsible
 
 ## Class Structure
 
-### Namespace: `Minichan\Grpc`
-
-The class is part of the `Minichan\Grpc` namespace.
-
 ### Dependencies
 
 - `Closure`: A PHP built-in class representing anonymous functions.
