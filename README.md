@@ -208,7 +208,7 @@ Co::create(function () {
 Introduction <a name="introduction"></a>
 A command-line interface for generating various components in your project. This tool aims to streamline the process of creating classes, interfaces, and other components in your project.
 
-# Usage
+## Usage
 General Usage <a name="general-usage"></a>
 ```bash
 php lib/cli.php [command] [arguments]
@@ -263,8 +263,8 @@ Generate a new services-related class or interface.
 php lib/cli.php generate:services [ServicesName] [Interface|Class]
 ```
 
-Troubleshooting <a name="troubleshooting"></a>
-If you encounter issues while using [Your CLI Tool Name], consider the following steps:
+## Troubleshooting
+If you encounter issues while using , consider the following steps:
 
 1. Check the Command Syntax: Ensure that you are using the correct syntax for the command.
 
