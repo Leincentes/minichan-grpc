@@ -205,7 +205,6 @@ Co::create(function () {
 
 
 ## CLI
-Introduction <a name="introduction"></a>
 A command-line interface for generating various components in your project. This tool aims to streamline the process of creating classes, interfaces, and other components in your project.
 
 ## Usage
