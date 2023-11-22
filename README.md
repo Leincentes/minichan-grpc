@@ -206,7 +206,7 @@ Co::create(function () {
 
 
 # CLI
-A command-line interface for generating various components in your project. This tool aims to streamline the process of creating classes, interfaces, and other components in your project.
+A command-line interface for generating various classes and interfaces. This tool aims to streamline the process of creating classes and interfaces.
 
 ## Usage
 General Usage <a name="general-usage"></a>
@@ -264,13 +264,6 @@ Generate a new services-related class or interface.
 php lib/cli.php generate:services [ServicesName] [Interface|Class]
 ```
 
-## Troubleshooting
-If you encounter issues while using , consider the following steps:
-
-1. Check the Command Syntax: Ensure that you are using the correct syntax for the command.
-
-2. Review Error Messages: Examine any error messages displayed in the console for clues about the issue.
-
 # Config
 The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
 
@@ -307,7 +300,7 @@ The Config class is a configuration class within the Minichan\Config namespace. 
         ];
     }
 ```
-The 'getServices' method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
+The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
 
 **`getMiddlewares` Method**
 ```php
@@ -324,9 +317,10 @@ The 'getServices' method is responsible for returning an array of gRPC services 
         ];
     }
 ```
-The 'getMiddlewares' method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
+The **`getMiddlewares`** method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
 
 # DATABASE
+A minimal PHP database helper for ease development.
 ## Method Description:
 
 The **`select`** method is designed to execute a SELECT query on a specified table, offering flexibility through various parameter combinations.
@@ -356,11 +350,278 @@ The **`select`** method is designed to execute a SELECT query on a specified tab
 ## Usage:
 
 ```php
-// Example without callback
+// without callback
 $result = select("your_table", ["column1", "column2"], ["column3" => "value"]);
 
-// Example with callback
+// with callback
 select("your_table", ["column1", "column2"], ["column3" => "value"], function ($row) {
-    // Custom processing for each row
+    // custom processing for each row
 });
 
+```
+
+## Method Description:
+
+The **`insert`** method facilitates the insertion of one or more records into a specified table.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to insert records into.
+
+- **$values (array):**
+  An associative array representing the values to be inserted, where keys are column names.
+
+- **$primaryKey (string|null):**
+  The primary key column name (optional).
+
+## Return Value:
+
+- The PDOStatement object on success.
+
+- Null on failure.
+
+## Usage Example:
+
+```php
+// insert sample
+$inserted = insert("your_table", ["column1" => "value1", "column2" => "value2"]);
+
+// with specified primary key
+$inserted = insert("your_table", ["column1" => "value1", "column2" => "value2"], "id");
+
+```
+
+## Method Description:
+
+The **`update`** method is employed to modify records in a specified table based on the provided conditions.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to update records in.
+
+- **$values (array):**
+  An associative array representing the new values to be set.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the update.
+
+## Return Value:
+
+- The PDOStatement object on success.
+
+- Null on failure.
+
+## Usage Example:
+
+```php
+// update sample
+$updated = update("your_table", ["column1" => "new_value"], ["column2" => "value2"]);
+
+// with specified condition
+$updated = update("your_table", ["column1" => "new_value"], ["column2" => "value2", "column3" => "value3"]);
+
+```
+
+## Method Description:
+
+The **`delete`** method is utilized to remove records from a specified table based on the provided conditions.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to delete records from.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the delete.
+
+## Return Value:
+
+- The PDOStatement object on success.
+
+- Null on failure.
+
+## Usage Example:
+
+```php
+// delete sample
+$deleted = delete("your_table", ["column1" => "value1"]);
+
+// with specified condition
+$deleted = delete("your_table", ["column2" => "value2", "column3" => "value3"]);
+
+```
+
+## Method Description:
+
+The **`get`** method is designed to execute a SELECT query and retrieve a single result, which can be either a single row or a single column value.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$columns (array|string):**
+  An array or string representing the columns to be selected.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+## Return Value:
+
+- The result of the SELECT query, which can be a single row or a single column value.
+
+## Usage Example:
+
+```php
+// retrieving a single row
+$resultRow = get("your_table", ["column1", "column2"], ["column3" => "value"]);
+
+// retrieving a single column value
+$singleValue = get("your_table", "column1", ["column2" => "value2"]);
+
+```
+
+## Method Description:
+
+The **`has`** method is employed to determine if records exist in a table based on the provided conditions.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+## Return Value:
+
+- `true` if records exist based on the conditions.
+
+- `false` otherwise.
+
+## Usage Example:
+
+```php
+// checking if records exist
+$hasRecords = has("your_table", ["column1" => "value1"]);
+
+// checking with multiple conditions
+$hasRecords = has("your_table", ["column2" => "value2", "column3" => "value3"]);
+
+```
+
+## Method Description:
+
+The **`rand`** method executes a SELECT query and retrieves a random result, which can be a random value from a specific column.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$column (array|string):**
+  An array or string representing the column to be selected for the random result.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+## Return Value:
+
+- The random result of the SELECT query, which can be a single value.
+
+## Usage Example:
+
+```php
+// retrieving a random value from a specific column
+$randomValue = rand("your_table", "column1");
+
+// with specified conditions
+$randomValue = rand("your_table", "column2", ["column3" => "value3"]);
+
+```
+
+## Method Description:
+
+The **`count`** method is used to determine the number of records in a table based on the provided conditions.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+## Return Value:
+
+- The number of records that match the conditions.
+
+## Usage Example:
+
+```php
+// counting records
+$recordCount = count("your_table");
+
+// with specified conditions
+$filteredCount = count("your_table", ["column1" => "value1", "column2" => "value2"]);
+
+```
+
+## Method Descriptions:
+
+### max Method
+
+The **`max`** method calculates the maximum value for a specified column in the table based on the provided conditions.
+
+### min Method
+
+The **`min`** method calculates the minimum value for a specified column in the table based on the provided conditions.
+
+### avg Method
+
+The **`avg`** method calculates the average value for a specified column in the table based on the provided conditions.
+
+### sum Method
+
+The **`sum`** method calculates the sum of values for a specified column in the table based on the provided conditions.
+
+## Parameters:
+
+- **$table (string):**
+  The name of the table to query.
+
+- **$column (string):**
+  The name of the column for which the aggregate value is calculated.
+
+- **$where (array):**
+  An associative array representing the WHERE conditions for the query.
+
+## Return Value:
+
+- The calculated aggregate value for the specified column (as a string).
+
+## Usage Examples:
+
+```php
+// using max
+$maxValue = max("your_table", "column1");
+
+// using min
+$minValue = min("your_table", "column2");
+
+// using avg
+$averageValue = avg("your_table", "column3", ["column4" => "value"]);
+
+// using sum
+$totalSum = sum("your_table", "column5", ["column6" => "value"]);
+
+```
+
+## Troubleshooting
+If you encounter issues while using , consider the following steps:
+
+1. Check the Command Syntax: Ensure that you are using the correct syntax for the command.
+
+2. Review Error Messages: Examine any error messages displayed in the console for clues about the issue.
