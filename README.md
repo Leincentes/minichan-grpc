@@ -205,19 +205,21 @@ Co::create(function () {
 ```
 
 
-# CLI
-A command-line interface for generating various classes and interfaces. This tool aims to streamline the process of creating classes and interfaces.
+# CLI minichan
+A command-line minichan interface is for generating various classes and interfaces. This tool aims to streamline the process of creating classes and interfaces.
 
 ## Usage
 General Usage <a name="general-usage"></a>
 ```bash
-php lib/cli.php [command] [arguments]
+./minichan [command] [arguments]
+or 
+php minichan [command] [arguments]
 ```
 
 Available Commands <a name="available-commands"></a>
 Use the following command to display a list of available commands:
 ```bash
-php lib/cli.php help
+./minichan help
 ```
 
 Command Reference <a name="command-reference"></a>
@@ -225,43 +227,57 @@ Command Reference <a name="command-reference"></a>
 generate:cli <a name="generate-cli"></a>
 Generate a new CLI class or interface.
 ```bash
-php lib/cli.php generate:cli [CliName] [Interface|Class]
+./minichan generate:cli [CliName] [Interface|Class]
+or
+php minichan generate:cli [CliName] [Interface|Class]
 ```
 
 generate:config <a name="generate-config"></a>
 Generate a new configuration class or interface.
 ```bash
-php lib/cli.php generate:config [ConfigName] [Interface|Class]
+./minichan generate:config [ConfigName] [Interface|Class]
+or
+php minichan generate:config [ConfigName] [Interface|Class]
 ```
 
 generate:database <a name="generate-database"></a>
 Generate a new database-related class or interface.
 ```bash
-php lib/cli.php generate:database [DatabaseName] [Interface|Class]
+./minichan generate:database [DatabaseName] [Interface|Class]
+or
+php minichan generate:database [DatabaseName] [Interface|Class]
 ```
 
 generate:exception <a name="generate-exception"></a>
 Generate a new exception class or interface.
 ```bash
-php lib/cli.php generate:exception [ExceptionName] [Interface|Class]
+./minichan generate:exception [ExceptionName] [Interface|Class]
+or
+php minichan generate:exception [ExceptionName] [Interface|Class]
 ```
 
 generate:grpc <a name="generate-grpc"></a>
 Generate a new grpc-related class or interface.
 ```bash
-php lib/cli.php generate:grpc [GrpcName] [Interface|Class]
+./minichan generate:grpc [GrpcName] [Interface|Class]
+or
+php minichan generate:grpc [GrpcName] [Interface|Class]
 ```
 
 generate:middleware <a name="generate-middleware"></a>
 Generate a new middleware class or interface.
 ```bash
-php lib/cli.php generate:middleware [MiddlewareName] [Interface|Class]
+./minichan generate:middleware [MiddlewareName] [Interface|Class]
+or
+php minichan generate:middleware [MiddlewareName] [Interface|Class]
 ```
 
 generate:services <a name="generate-services"></a>
 Generate a new services-related class or interface.
 ```bash
-php lib/cli.php generate:services [ServicesName] [Interface|Class]
+./minichan generate:services [ServicesName] [Interface|Class]
+or
+php minichan 
 ```
 
 # Config
