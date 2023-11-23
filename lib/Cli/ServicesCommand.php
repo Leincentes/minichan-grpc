@@ -23,7 +23,7 @@ class ServicesCommand extends Command
         [$serviceName, $type] = $args;
 
         // Set up file and directory paths
-        $directory = 'lib/Services';
+        $directory = 'Services';
         $filename = $directory . '/' . $serviceName . '.php';
 
         // Create the directory if it doesn't exist

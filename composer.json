@@ -6,7 +6,7 @@
     "autoload": {
         "psr-4": {
             "Minichan\\": "lib/",
-            "Services\\": "Services",
+            "Services\\": "Services/",
             "GPBMetadata\\Proto\\": "GPBMetadata/Proto/",
             "PHP\\UserService\\": "PHP/UserService/"
         }

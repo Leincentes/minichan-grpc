@@ -6,7 +6,6 @@ namespace Minichan\Config;
 
 use Minichan\Middleware\LoggingMiddleware;
 use Minichan\Middleware\TraceMiddleware;
-use Services\AuthService;
 
 /**
  * 
@@ -22,7 +21,7 @@ class Config
     public static function getServices(): array
     {
         return [
-            AuthService::class,
+            ...\Services\Config\Config::registerServices(),
         ];
     }
 

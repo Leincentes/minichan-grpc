@@ -1127,6 +1127,37 @@ class AuthService implements UserServiceInterface
 }
 
 ```
+## Add the Service in the Config
+In the folder Services you'll find Cofig folder where Config.php reside. This is where you can register the Service you created.
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Services\Config;
+
+use Services\AuthService;
+
+/**
+ * Configuration class for defining gRPC services.
+ */
+class Config
+{
+    /**
+     * Register gRPC services.
+     *
+     * @return array
+     */
+    public static function registerServices(): array
+    {
+        // Add your services here
+        return [
+            AuthService::class,
+        ];
+    }
+}
+
+```
 
 
 ## Troubleshooting
