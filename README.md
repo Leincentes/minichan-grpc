@@ -302,7 +302,7 @@ The Config class is a configuration class within the Minichan\Config namespace. 
         // Class implementation...
     }
 ```
-The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the 'AuthService' class. It is assumed that the 'AuthService' class is a gRPC service that needs to be registered.
+The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the **...\Services\Config\Config::registerServices()** class. This assume that in the **Services\Config\Config** file have a register Service.
 
 ```php
     /**
@@ -313,7 +313,7 @@ The **`getServices`** method is responsible for returning an array of gRPC servi
     public static function getServices(): array
     {
         return [
-            AuthService::class,
+            ...\Services\Config\Config::registerServices(),
         ];
     }
 ```
