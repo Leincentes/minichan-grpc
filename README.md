@@ -3,16 +3,18 @@
 A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code generator, server, and client components.
 
 ## OVERVIEW
-
-
-
-
-
-
-
-
-
-
+**minichan-v1** is a PHP gRPC library that leverages Swoole coroutines. It encompasses a protoc code generator, server, and client components to facilitate the development of gRPC-based applications. The library utilizes Swoole version 5.1.0 or higher and requires the HTTP2 protocol to be enabled (--enable-http2).
+### Table of Contents
+- [Installation](##installation)
+- [Protoc Code Generation](#generate-php-code-via-proto)
+- [Basic gRPC Server](#basic-grpc-server)
+- [Basic gRPC Client](#basic-grpc-client)
+- [CLI minichan](#cli-minichan)
+- [Usage](#usage)
+- [Config](#config)
+- [Database](#database)
+- [Middleware](#middleware)
+- [Server Class](#server-class)
 
 ## INSTALLATION
 Swoole >= 5.1.0: https://wiki.swoole.com/#/environment
@@ -106,7 +108,430 @@ Modify and execute to make it effective,
 composer dump-autoload
 ```
 
-## Basic Serve of gRPC Server
+# Server Class
+The Server class is a crucial component of the Minichan application, responsible for handling GRPC server configurations, managing services, and processing incoming requests. It utilizes the Swoole extension to create an HTTP server capable of handling GRPC requests.
+
+## Class Structure
+
+### Dependencies
+
+- `Closure`: A PHP built-in class representing anonymous functions.
+- `Minichan\Config\Constant`: Constants related to Minichan configuration.
+- `Minichan\Config\Status`: Constants related to status codes.
+- `Minichan\Exception\GRPCException`: Exception class for GRPC-related errors.
+- `Minichan\Exception\InvokeException`: Exception class for invocation errors.
+- `Minichan\Middleware\MiddlewareInterface`: Interface for middleware implementations.
+- `Minichan\Middleware\ServiceHandler`: Middleware for handling GRPC service requests.
+- `Minichan\Middleware\StackHandler`: Middleware stack handler.
+- `Minichan\Grpc\Context`: Context for managing values associated with a specific request.
+- `Minichan\Grpc\Util`: Utility class for GRPC-related operations.
+- `Minichan\Grpc\Request`: Class representing a GRPC request.
+- `Minichan\Grpc\Response`: Class representing a GRPC response.
+- `Minichan\Grpc\ServiceContainer`: Container for managing GRPC services.
+
+### Properties
+
+- `$host`, `$port`, `$mode`, `$sockType`: Server configuration parameters.
+- `$settings`: Additional server settings.
+- `$services`: Container for registered GRPC services.
+- `$workerContexts`, `$workerContext`: Worker-specific contexts for executing closures.
+- `$server`, `$handler`: Swoole server instance and middleware handler.
+
+### Constructor
+
+#### `__construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)`
+
+**Description:**
+Initializes the server with specified host, port, mode, and socket type.
+Creates a Swoole HTTP server and sets up event handlers.
+
+### Public Methods
+
+#### `withWorkerContext(string $context, Closure $callback): self`
+
+**Description:**
+Registers a closure to be executed with worker context.
+
+#### `addMiddleware(MiddlewareInterface $middleware): self`
+
+**Description:**
+Adds a middleware to the server's middleware stack.
+
+#### `addMiddlewares(array $middlewares): self`
+
+**Description:**
+Adds an array of middlewares to the server's middleware stack.
+
+#### `set(array $settings): self`
+
+**Description:**
+Sets server settings.
+
+#### `start(): void`
+
+**Description:**
+Starts the Swoole server and initializes event handlers.
+
+#### `on(string $event, Closure $callback): self`
+
+**Description:**
+Registers a callback for a specific Swoole server event.
+
+#### `register(string $class): self`
+
+**Description:**
+Registers a GRPC service based on the provided class.
+
+#### `registerServices(array $serviceClasses): self`
+
+**Description:**
+Registers multiple GRPC services based on an array of class names.
+
+### Private Methods
+
+#### `process(\Swoole\Http\Request $rawRequest, \Swoole\Http\Response $rawResponse): void`
+
+**Description:**
+Handles an incoming GRPC request.
+
+#### `initWorkerContext(): void`
+
+**Description:**
+Initializes the worker context with values and closures.
+
+#### `send(Response $response): void`
+
+**Description:**
+Sends a GRPC response.
+
+#### `validateRequest(\Swoole\Http\Request $request): void`
+
+**Description:**
+Validates a GRPC request for essential headers.
+
+#### `validateServiceClass(string $class): void`
+
+**Description:**
+Validates if the provided class is a valid GRPC service class.
+
+#### `handleGRPCException(GRPCException $e, Context $context): void`
+
+**Description:**
+Handles a GRPC exception by logging and updating the context.
+
+# Service
+## Sample Service
+
+## AuthService Class
+
+The `AuthService` class is a service implementation that provides functionality related to user authentication. It implements the `UserServiceInterface` and offers methods for user registration, login, updating user information, deleting users, retrieving individual users, and retrieving a list of all users.
+
+### Class Structure
+
+#### Dependencies
+
+- `Minichan\Database\Database`: A class representing database interactions.
+- `PHP\UserService\User`: The generated PHP class representing a user in the gRPC service.
+- `PHP\UserService\UserResponse`: The generated PHP class representing a response in the gRPC service.
+- `PHP\UserService\UserServiceInterface`: The generated PHP interface for the gRPC user service.
+- `Minichan\Exception\InvokeException`: Custom exception class for invocation errors.
+- `Minichan\Exception\AlreadyExistsException`: Custom exception class for already existing entities.
+- `Minichan\Grpc\ContextInterface`: Interface for managing values associated with a specific request.
+
+#### Properties
+
+- `$response`: An instance of `UserResponse` used for constructing and returning responses.
+- `$db`: An instance of the `Database` class for handling database operations.
+
+### Constructor
+
+#### `__construct()`
+
+**Description:**
+Initializes the class by creating a `UserResponse` instance and setting up the database connection.
+
+### Public Methods
+
+#### `RegisterUser(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Registers a new user by checking for existing usernames, hashing the password, and inserting the user record into the database.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The user registration request.
+
+**Returns:**
+- `UserResponse`: A response indicating the status of the user registration.
+
+**Throws:**
+- `\Minichan\Exception\AlreadyExistsException`: If the username already exists in the database.
+- `\Minichan\Exception\InvokeException`: If there is an issue with the registration process.
+
+#### `Login(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Validates user credentials for login by retrieving the user from the database and comparing the hashed password.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The user login request.
+
+**Returns:**
+- `UserResponse`: A response indicating the status of the user login.
+
+**Throws:**
+- `\Minichan\Exception\InvokeException`: If authentication fails or the user is not found.
+
+#### `UpdateUser(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Updates user information by updating the user record in the database.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The user update request.
+
+**Returns:**
+- `UserResponse`: A response indicating the status of the user update.
+
+**Throws:**
+- `\Minichan\Exception\InvokeException`: If the update operation fails.
+
+#### `DeleteUser(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Deletes a user by removing the user record from the database.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The user deletion request.
+
+**Returns:**
+- `UserResponse`: A response indicating the status of the user deletion.
+
+**Throws:**
+- `\Minichan\Exception\InvokeException`: If the deletion operation fails.
+
+#### `GetUser(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Retrieves a user by querying the database based on the provided username.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The user retrieval request.
+
+**Returns:**
+- `UserResponse`: A response containing information about the retrieved user.
+
+**Throws:**
+- `\Minichan\Exception\InvokeException`: If the user is not found.
+
+#### `GetAllUser(ContextInterface $ctx, User $request): UserResponse`
+
+**Description:**
+Retrieves a list of all users from the database.
+
+**Parameters:**
+- `$ctx (ContextInterface)`: The context of the gRPC request.
+- `$request (User)`: The request for retrieving all users.
+
+**Returns:**
+- `UserResponse`: A response containing information about all users.
+
+**Throws:**
+- `\Minichan\Exception\InvokeException`: If there is an issue retrieving the user list.
+
+## Usage
+Under the Services folder your going to create the AuthService class that will implement UserServiceInterface that the binary plugin generated.
+```php
+declare(strict_types=1);
+
+namespace Services;
+
+use Minichan\Database\Database;
+use PHP\UserService\User;
+use PHP\UserService\UserResponse;
+use PHP\UserService\UserServiceInterface;
+
+class AuthService implements UserServiceInterface
+{
+    private UserResponse $response;
+    private Database $db;
+    public function __construct() {
+        $this->response = new UserResponse();
+        // dynamic instance that depends on you
+        $this->db = new Database([
+            'type' => 'mysql',
+            'host' => 'localhost',
+            'database' => 'db_name',
+            'username' => 'db_username',
+            'password' => 'db_password'
+        ]);
+    }
+    /**
+    * @param \Minichan\Grpc\ContextInterface $ctx
+    * @param User $request
+    * @return User
+    *
+    * @throws \Minichan\Exception\InvokeException
+    */
+    public function RegisterUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
+        $existingUsers = $this->db->select('users', ['username'], ['username' => $request->getUsername()]);
+
+        if (count($existingUsers) > 0) {
+            throw new \Minichan\Exception\AlreadyExistsException("user with the provided username already exists");
+        }
+
+        $userRecord = [
+            'username' => $request->getUsername(),
+            'password' => password_hash($request->getPassword(), PASSWORD_DEFAULT),
+        ];
+
+        $this->db->insert('users', $userRecord);
+
+        return $this->response->setMessage('registered user: ' . $userRecord['username']);
+    }   
+
+    /**
+     * @param \Minichan\Grpc\ContextInterface $ctx
+     * @param User $request
+     * @return UserResponse
+     *
+     * @throws \Minichan\Exception\InvokeException
+     */
+    public function Login(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
+        $users = $this->db->select('users', ['username', 'password'],
+            [
+                'username' => $request->getUsername(),
+            ]);
+        if (count($users) > 0) {
+            $user = $users[0];
+    
+            if (password_verify($request->getPassword(), $user['password'])) {
+                return $this->response->setMessage('User login successful');
+            } else {
+                throw new \Minichan\Exception\InvokeException("authentication failed");
+            }
+        } else {
+            throw new \Minichan\Exception\InvokeException("user not found");
+        }
+    }
+
+    /**
+     * @param \Minichan\Grpc\ContextInterface $ctx
+     * @param User $request
+     * @return User
+     *
+     * @throws \Minichan\Exception\InvokeException
+     */
+    public function UpdateUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
+        $users = $this->db->update('users', 
+            [
+                'username' => $request->getUsername(),
+                'password' => password_hash($request->getPassword(), PASSWORD_DEFAULT),
+            ], [
+            'username' => $request->getUsername(),
+            ]);
+        if($users) {
+            return $this->response->setMessage('user updated successfully');
+        } else {
+            throw new \Minichan\Exception\InvokeException("update user failed");
+        }
+    }
+
+    /**
+     * @param \Minichan\Grpc\ContextInterface $ctx
+     * @param User $request
+     * @return User
+     *
+     * @throws \Minichan\Exception\InvokeException
+     */
+    public function DeleteUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
+        $users = $this->db->delete('users', [
+            'username' => $request->getUsername(),
+        ]);
+        if($users) {
+            return $this->response->setMessage('user deleted successfully');
+        } else {
+            throw new \Minichan\Exception\InvokeException("delete user failed");
+        }
+    }
+
+    /**
+     * @param \Minichan\Grpc\ContextInterface $ctx
+     * @param User $request
+     * @return User
+     *
+     * @throws \Minichan\Exception\InvokeException
+     */
+    public function GetUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
+
+        $users = $this->db->get('users', ['username', 'password'], ['username' => $request->getUsername()]);
+
+        if($users) {
+            return $this->response->setMessage('user: ' . $users['username']);
+        } else {
+            throw new \Minichan\Exception\InvokeException("user does not exist");
+        }
+    }
+
+    /**
+     * @param \Minichan\Grpc\ContextInterface $ctx
+     * @param User $request
+     * @return User[]
+     *
+     * @throws \Minichan\Exception\InvokeException
+     */
+    public function GetAllUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse { 
+        
+        $users = $this->db->select('users', ['username', 'password']);
+        $responseMessage = '';
+
+        foreach ($users as $user) {
+            $responseMessage .= 'users: ' . $user['username'] . PHP_EOL;
+        }
+    
+        return $this->response->setMessage($responseMessage);
+    }
+}
+
+```
+
+## Add the Service in the Config
+In the folder Services you'll find Cofig folder where Config.php reside. This is where you can register the Service you created.
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Services\Config;
+
+use Services\AuthService;
+
+/**
+ * Configuration class for defining gRPC services.
+ */
+class Config
+{
+    /**
+     * Register gRPC services.
+     *
+     * @return array
+     */
+    public static function registerServices(): array
+    {
+        // Add your services here
+        return [
+            AuthService::class,
+        ];
+    }
+}
+
+```
+
+## Basic gRPC Server
 Under the lib folder you will find the run.php
 All you needed to do is to execute the file.
 ```php
@@ -145,7 +570,7 @@ $server->start();
 
 ```
 
-## Basic Client
+## Basic gRPC Client
 A basic example how the client will be handled.
 ```php
 // client.php
@@ -737,427 +1162,6 @@ The **`ServiceHandler`** already have it's instance in the StackHandler in Serve
     }
 ```
 
-# Server Class
-The Server class is a crucial component of the Minichan application, responsible for handling GRPC server configurations, managing services, and processing incoming requests. It utilizes the Swoole extension to create an HTTP server capable of handling GRPC requests.
-
-## Class Structure
-
-### Dependencies
-
-- `Closure`: A PHP built-in class representing anonymous functions.
-- `Minichan\Config\Constant`: Constants related to Minichan configuration.
-- `Minichan\Config\Status`: Constants related to status codes.
-- `Minichan\Exception\GRPCException`: Exception class for GRPC-related errors.
-- `Minichan\Exception\InvokeException`: Exception class for invocation errors.
-- `Minichan\Middleware\MiddlewareInterface`: Interface for middleware implementations.
-- `Minichan\Middleware\ServiceHandler`: Middleware for handling GRPC service requests.
-- `Minichan\Middleware\StackHandler`: Middleware stack handler.
-- `Minichan\Grpc\Context`: Context for managing values associated with a specific request.
-- `Minichan\Grpc\Util`: Utility class for GRPC-related operations.
-- `Minichan\Grpc\Request`: Class representing a GRPC request.
-- `Minichan\Grpc\Response`: Class representing a GRPC response.
-- `Minichan\Grpc\ServiceContainer`: Container for managing GRPC services.
-
-### Properties
-
-- `$host`, `$port`, `$mode`, `$sockType`: Server configuration parameters.
-- `$settings`: Additional server settings.
-- `$services`: Container for registered GRPC services.
-- `$workerContexts`, `$workerContext`: Worker-specific contexts for executing closures.
-- `$server`, `$handler`: Swoole server instance and middleware handler.
-
-### Constructor
-
-#### `__construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)`
-
-**Description:**
-Initializes the server with specified host, port, mode, and socket type.
-Creates a Swoole HTTP server and sets up event handlers.
-
-### Public Methods
-
-#### `withWorkerContext(string $context, Closure $callback): self`
-
-**Description:**
-Registers a closure to be executed with worker context.
-
-#### `addMiddleware(MiddlewareInterface $middleware): self`
-
-**Description:**
-Adds a middleware to the server's middleware stack.
-
-#### `addMiddlewares(array $middlewares): self`
-
-**Description:**
-Adds an array of middlewares to the server's middleware stack.
-
-#### `set(array $settings): self`
-
-**Description:**
-Sets server settings.
-
-#### `start(): void`
-
-**Description:**
-Starts the Swoole server and initializes event handlers.
-
-#### `on(string $event, Closure $callback): self`
-
-**Description:**
-Registers a callback for a specific Swoole server event.
-
-#### `register(string $class): self`
-
-**Description:**
-Registers a GRPC service based on the provided class.
-
-#### `registerServices(array $serviceClasses): self`
-
-**Description:**
-Registers multiple GRPC services based on an array of class names.
-
-### Private Methods
-
-#### `process(\Swoole\Http\Request $rawRequest, \Swoole\Http\Response $rawResponse): void`
-
-**Description:**
-Handles an incoming GRPC request.
-
-#### `initWorkerContext(): void`
-
-**Description:**
-Initializes the worker context with values and closures.
-
-#### `send(Response $response): void`
-
-**Description:**
-Sends a GRPC response.
-
-#### `validateRequest(\Swoole\Http\Request $request): void`
-
-**Description:**
-Validates a GRPC request for essential headers.
-
-#### `validateServiceClass(string $class): void`
-
-**Description:**
-Validates if the provided class is a valid GRPC service class.
-
-#### `handleGRPCException(GRPCException $e, Context $context): void`
-
-**Description:**
-Handles a GRPC exception by logging and updating the context.
-
-# Service
-## Sample Service
-
-## AuthService Class
-
-The `AuthService` class is a service implementation that provides functionality related to user authentication. It implements the `UserServiceInterface` and offers methods for user registration, login, updating user information, deleting users, retrieving individual users, and retrieving a list of all users.
-
-### Class Structure
-
-#### Dependencies
-
-- `Minichan\Database\Database`: A class representing database interactions.
-- `PHP\UserService\User`: The generated PHP class representing a user in the gRPC service.
-- `PHP\UserService\UserResponse`: The generated PHP class representing a response in the gRPC service.
-- `PHP\UserService\UserServiceInterface`: The generated PHP interface for the gRPC user service.
-- `Minichan\Exception\InvokeException`: Custom exception class for invocation errors.
-- `Minichan\Exception\AlreadyExistsException`: Custom exception class for already existing entities.
-- `Minichan\Grpc\ContextInterface`: Interface for managing values associated with a specific request.
-
-#### Properties
-
-- `$response`: An instance of `UserResponse` used for constructing and returning responses.
-- `$db`: An instance of the `Database` class for handling database operations.
-
-### Constructor
-
-#### `__construct()`
-
-**Description:**
-Initializes the class by creating a `UserResponse` instance and setting up the database connection.
-
-### Public Methods
-
-#### `RegisterUser(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Registers a new user by checking for existing usernames, hashing the password, and inserting the user record into the database.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The user registration request.
-
-**Returns:**
-- `UserResponse`: A response indicating the status of the user registration.
-
-**Throws:**
-- `\Minichan\Exception\AlreadyExistsException`: If the username already exists in the database.
-- `\Minichan\Exception\InvokeException`: If there is an issue with the registration process.
-
-#### `Login(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Validates user credentials for login by retrieving the user from the database and comparing the hashed password.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The user login request.
-
-**Returns:**
-- `UserResponse`: A response indicating the status of the user login.
-
-**Throws:**
-- `\Minichan\Exception\InvokeException`: If authentication fails or the user is not found.
-
-#### `UpdateUser(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Updates user information by updating the user record in the database.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The user update request.
-
-**Returns:**
-- `UserResponse`: A response indicating the status of the user update.
-
-**Throws:**
-- `\Minichan\Exception\InvokeException`: If the update operation fails.
-
-#### `DeleteUser(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Deletes a user by removing the user record from the database.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The user deletion request.
-
-**Returns:**
-- `UserResponse`: A response indicating the status of the user deletion.
-
-**Throws:**
-- `\Minichan\Exception\InvokeException`: If the deletion operation fails.
-
-#### `GetUser(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Retrieves a user by querying the database based on the provided username.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The user retrieval request.
-
-**Returns:**
-- `UserResponse`: A response containing information about the retrieved user.
-
-**Throws:**
-- `\Minichan\Exception\InvokeException`: If the user is not found.
-
-#### `GetAllUser(ContextInterface $ctx, User $request): UserResponse`
-
-**Description:**
-Retrieves a list of all users from the database.
-
-**Parameters:**
-- `$ctx (ContextInterface)`: The context of the gRPC request.
-- `$request (User)`: The request for retrieving all users.
-
-**Returns:**
-- `UserResponse`: A response containing information about all users.
-
-**Throws:**
-- `\Minichan\Exception\InvokeException`: If there is an issue retrieving the user list.
-
-## Usage
-Your going to create the AuthService class that will implement UserServiceInterface that the binary plugin generated.
-```php
-declare(strict_types=1);
-
-namespace Services;
-
-use Minichan\Database\Database;
-use PHP\UserService\User;
-use PHP\UserService\UserResponse;
-use PHP\UserService\UserServiceInterface;
-
-class AuthService implements UserServiceInterface
-{
-    private UserResponse $response;
-    private Database $db;
-    public function __construct() {
-        $this->response = new UserResponse();
-        // dynamic instance that depends on you
-        $this->db = new Database([
-            'type' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'db_name',
-            'username' => 'db_username',
-            'password' => 'db_password'
-        ]);
-    }
-    /**
-    * @param \Minichan\Grpc\ContextInterface $ctx
-    * @param User $request
-    * @return User
-    *
-    * @throws \Minichan\Exception\InvokeException
-    */
-    public function RegisterUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
-        $existingUsers = $this->db->select('users', ['username'], ['username' => $request->getUsername()]);
-
-        if (count($existingUsers) > 0) {
-            throw new \Minichan\Exception\AlreadyExistsException("user with the provided username already exists");
-        }
-
-        $userRecord = [
-            'username' => $request->getUsername(),
-            'password' => password_hash($request->getPassword(), PASSWORD_DEFAULT),
-        ];
-
-        $this->db->insert('users', $userRecord);
-
-        return $this->response->setMessage('registered user: ' . $userRecord['username']);
-    }   
-
-    /**
-     * @param \Minichan\Grpc\ContextInterface $ctx
-     * @param User $request
-     * @return UserResponse
-     *
-     * @throws \Minichan\Exception\InvokeException
-     */
-    public function Login(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
-        $users = $this->db->select('users', ['username', 'password'],
-            [
-                'username' => $request->getUsername(),
-            ]);
-        if (count($users) > 0) {
-            $user = $users[0];
-    
-            if (password_verify($request->getPassword(), $user['password'])) {
-                return $this->response->setMessage('User login successful');
-            } else {
-                throw new \Minichan\Exception\InvokeException("authentication failed");
-            }
-        } else {
-            throw new \Minichan\Exception\InvokeException("user not found");
-        }
-    }
-
-    /**
-     * @param \Minichan\Grpc\ContextInterface $ctx
-     * @param User $request
-     * @return User
-     *
-     *a@throws \Minichan\Exception\InvokeException
-     */
-    public function UpdateUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
-        $users = $this->db->update('users', 
-            [
-                'username' => $request->getUsername(),
-                'password' => password_hash($request->getPassword(), PASSWORD_DEFAULT),
-            ], [
-            'username' => $request->getUsername(),
-            ]);
-        if($users) {
-            return $this->response->setMessage('user updated successfully');
-        } else {
-            throw new \Minichan\Exception\InvokeException("update user failed");
-        }
-    }
-
-    /**
-     * @param \Minichan\Grpc\ContextInterface $ctx
-     * @param User $request
-     * @return User
-     *
-     * @throws \Minichan\Exception\InvokeException
-     */
-    public function DeleteUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
-        $users = $this->db->delete('users', [
-            'username' => $request->getUsername(),
-        ]);
-        if($users) {
-            return $this->response->setMessage('user deleted successfully');
-        } else {
-            throw new \Minichan\Exception\InvokeException("delete user failed");
-        }
-    }
-
-    /**
-     * @param \Minichan\Grpc\ContextInterface $ctx
-     * @param User $request
-     * @return User
-     *
-     * @throws \Minichan\Exception\InvokeException
-     */
-    public function GetUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse {
-
-        $users = $this->db->get('users', ['username', 'password'], ['username' => $request->getUsername()]);
-
-        if($users) {
-            return $this->response->setMessage('user: ' . $users['username']);
-        } else {
-            throw new \Minichan\Exception\InvokeException("user does not exist");
-        }
-    }
-
-    /**
-     * @param \Minichan\Grpc\ContextInterface $ctx
-     * @param User $request
-     * @return User[]
-     *
-     * @throws \Minichan\Exception\InvokeException
-     */
-    public function GetAllUser(\Minichan\Grpc\ContextInterface $ctx, User $request): UserResponse { 
-        
-        $users = $this->db->select('users', ['username', 'password']);
-        $responseMessage = '';
-
-        foreach ($users as $user) {
-            $responseMessage .= 'users: ' . $user['username'] . PHP_EOL;
-        }
-    
-        return $this->response->setMessage($responseMessage);
-    }
-}
-
-```
-## Add the Service in the Config
-In the folder Services you'll find Cofig folder where Config.php reside. This is where you can register the Service you created.
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace Services\Config;
-
-use Services\AuthService;
-
-/**
- * Configuration class for defining gRPC services.
- */
-class Config
-{
-    /**
-     * Register gRPC services.
-     *
-     * @return array
-     */
-    public static function registerServices(): array
-    {
-        // Add your services here
-        return [
-            AuthService::class,
-        ];
-    }
-}
-
-```
 
 
 ## Troubleshooting
