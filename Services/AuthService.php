@@ -1,7 +1,8 @@
 <?php
 
 declare(strict_types=1);
-namespace Minichan\Services;
+
+namespace Services;
 
 use Minichan\Database\Database;
 use PHP\UserService\User;

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Minichan\Config;
 
 use Minichan\Middleware\LoggingMiddleware;
-use Minichan\Middleware\ServiceHandler;
 use Minichan\Middleware\TraceMiddleware;
-use Minichan\Services\AuthService;
+use Services\AuthService;
 
 /**
  * 
