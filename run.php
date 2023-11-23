@@ -29,5 +29,4 @@ $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_POR
         'enable_coroutine' => true,         // Enable coroutine support
     ]);
 
-// Start the gRPC server
 $server->start();
