@@ -3,9 +3,9 @@
 A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code generator, server, and client components.
 
 ## OVERVIEW
-**minichan-v1** is a PHP gRPC library that leverages Swoole coroutines. It encompasses a protoc code generator, server, and client components to facilitate the development of gRPC-based applications. The library utilizes Swoole version 5.1.0 or higher and requires the HTTP2 protocol to be enabled (--enable-http2).
+**minichan-v1** is a PHP gRPC library that leverages Swoole coroutines. It encompasses a protoc code generator, server, and client components to facilitate the development of gRPC-based applications. 
 ### Table of Contents
-- [Installation](##installation)
+- [Installation](#installation)
 - [Protoc Code Generation](#generate-php-code-via-proto)
 - [Basic gRPC Server](#basic-grpc-server)
 - [Basic gRPC Client](#basic-grpc-client)
@@ -16,7 +16,7 @@ A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code gener
 - [Middleware](#middleware)
 - [Server Class](#server-class)
 
-## INSTALLATION
+# INSTALLATION
 Swoole >= 5.1.0: https://wiki.swoole.com/#/environment
 It needs to be turned on --enable-http2
 
@@ -107,117 +107,6 @@ Modify and execute to make it effective,
 ```bash 
 composer dump-autoload
 ```
-
-# Server Class
-The Server class is a crucial component of the Minichan application, responsible for handling GRPC server configurations, managing services, and processing incoming requests. It utilizes the Swoole extension to create an HTTP server capable of handling GRPC requests.
-
-## Class Structure
-
-### Dependencies
-
-- `Closure`: A PHP built-in class representing anonymous functions.
-- `Minichan\Config\Constant`: Constants related to Minichan configuration.
-- `Minichan\Config\Status`: Constants related to status codes.
-- `Minichan\Exception\GRPCException`: Exception class for GRPC-related errors.
-- `Minichan\Exception\InvokeException`: Exception class for invocation errors.
-- `Minichan\Middleware\MiddlewareInterface`: Interface for middleware implementations.
-- `Minichan\Middleware\ServiceHandler`: Middleware for handling GRPC service requests.
-- `Minichan\Middleware\StackHandler`: Middleware stack handler.
-- `Minichan\Grpc\Context`: Context for managing values associated with a specific request.
-- `Minichan\Grpc\Util`: Utility class for GRPC-related operations.
-- `Minichan\Grpc\Request`: Class representing a GRPC request.
-- `Minichan\Grpc\Response`: Class representing a GRPC response.
-- `Minichan\Grpc\ServiceContainer`: Container for managing GRPC services.
-
-### Properties
-
-- `$host`, `$port`, `$mode`, `$sockType`: Server configuration parameters.
-- `$settings`: Additional server settings.
-- `$services`: Container for registered GRPC services.
-- `$workerContexts`, `$workerContext`: Worker-specific contexts for executing closures.
-- `$server`, `$handler`: Swoole server instance and middleware handler.
-
-### Constructor
-
-#### `__construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)`
-
-**Description:**
-Initializes the server with specified host, port, mode, and socket type.
-Creates a Swoole HTTP server and sets up event handlers.
-
-### Public Methods
-
-#### `withWorkerContext(string $context, Closure $callback): self`
-
-**Description:**
-Registers a closure to be executed with worker context.
-
-#### `addMiddleware(MiddlewareInterface $middleware): self`
-
-**Description:**
-Adds a middleware to the server's middleware stack.
-
-#### `addMiddlewares(array $middlewares): self`
-
-**Description:**
-Adds an array of middlewares to the server's middleware stack.
-
-#### `set(array $settings): self`
-
-**Description:**
-Sets server settings.
-
-#### `start(): void`
-
-**Description:**
-Starts the Swoole server and initializes event handlers.
-
-#### `on(string $event, Closure $callback): self`
-
-**Description:**
-Registers a callback for a specific Swoole server event.
-
-#### `register(string $class): self`
-
-**Description:**
-Registers a GRPC service based on the provided class.
-
-#### `registerServices(array $serviceClasses): self`
-
-**Description:**
-Registers multiple GRPC services based on an array of class names.
-
-### Private Methods
-
-#### `process(\Swoole\Http\Request $rawRequest, \Swoole\Http\Response $rawResponse): void`
-
-**Description:**
-Handles an incoming GRPC request.
-
-#### `initWorkerContext(): void`
-
-**Description:**
-Initializes the worker context with values and closures.
-
-#### `send(Response $response): void`
-
-**Description:**
-Sends a GRPC response.
-
-#### `validateRequest(\Swoole\Http\Request $request): void`
-
-**Description:**
-Validates a GRPC request for essential headers.
-
-#### `validateServiceClass(string $class): void`
-
-**Description:**
-Validates if the provided class is a valid GRPC service class.
-
-#### `handleGRPCException(GRPCException $e, Context $context): void`
-
-**Description:**
-Handles a GRPC exception by logging and updating the context.
 
 # Service
 ## Sample Service
@@ -532,7 +421,7 @@ class Config
 ```
 
 ## Basic gRPC Server
-Under the lib folder you will find the run.php
+In the root directory you will find the run.php
 All you needed to do is to execute the file.
 ```php
 // run.php
@@ -1162,6 +1051,116 @@ The **`ServiceHandler`** already have it's instance in the StackHandler in Serve
     }
 ```
 
+# Server Class
+The Server class is a crucial component of the Minichan application, responsible for handling GRPC server configurations, managing services, and processing incoming requests. It utilizes the Swoole extension to create an HTTP server capable of handling GRPC requests.
+
+## Class Structure
+
+### Dependencies
+
+- `Closure`: A PHP built-in class representing anonymous functions.
+- `Minichan\Config\Constant`: Constants related to Minichan configuration.
+- `Minichan\Config\Status`: Constants related to status codes.
+- `Minichan\Exception\GRPCException`: Exception class for GRPC-related errors.
+- `Minichan\Exception\InvokeException`: Exception class for invocation errors.
+- `Minichan\Middleware\MiddlewareInterface`: Interface for middleware implementations.
+- `Minichan\Middleware\ServiceHandler`: Middleware for handling GRPC service requests.
+- `Minichan\Middleware\StackHandler`: Middleware stack handler.
+- `Minichan\Grpc\Context`: Context for managing values associated with a specific request.
+- `Minichan\Grpc\Util`: Utility class for GRPC-related operations.
+- `Minichan\Grpc\Request`: Class representing a GRPC request.
+- `Minichan\Grpc\Response`: Class representing a GRPC response.
+- `Minichan\Grpc\ServiceContainer`: Container for managing GRPC services.
+
+### Properties
+
+- `$host`, `$port`, `$mode`, `$sockType`: Server configuration parameters.
+- `$settings`: Additional server settings.
+- `$services`: Container for registered GRPC services.
+- `$workerContexts`, `$workerContext`: Worker-specific contexts for executing closures.
+- `$server`, `$handler`: Swoole server instance and middleware handler.
+
+### Constructor
+
+#### `__construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)`
+
+**Description:**
+Initializes the server with specified host, port, mode, and socket type.
+Creates a Swoole HTTP server and sets up event handlers.
+
+### Public Methods
+
+#### `withWorkerContext(string $context, Closure $callback): self`
+
+**Description:**
+Registers a closure to be executed with worker context.
+
+#### `addMiddleware(MiddlewareInterface $middleware): self`
+
+**Description:**
+Adds a middleware to the server's middleware stack.
+
+#### `addMiddlewares(array $middlewares): self`
+
+**Description:**
+Adds an array of middlewares to the server's middleware stack.
+
+#### `set(array $settings): self`
+
+**Description:**
+Sets server settings.
+
+#### `start(): void`
+
+**Description:**
+Starts the Swoole server and initializes event handlers.
+
+#### `on(string $event, Closure $callback): self`
+
+**Description:**
+Registers a callback for a specific Swoole server event.
+
+#### `register(string $class): self`
+
+**Description:**
+Registers a GRPC service based on the provided class.
+
+#### `registerServices(array $serviceClasses): self`
+
+**Description:**
+Registers multiple GRPC services based on an array of class names.
+
+### Private Methods
+
+#### `process(\Swoole\Http\Request $rawRequest, \Swoole\Http\Response $rawResponse): void`
+
+**Description:**
+Handles an incoming GRPC request.
+
+#### `initWorkerContext(): void`
+
+**Description:**
+Initializes the worker context with values and closures.
+
+#### `send(Response $response): void`
+
+**Description:**
+Sends a GRPC response.
+
+#### `validateRequest(\Swoole\Http\Request $request): void`
+
+**Description:**
+Validates a GRPC request for essential headers.
+
+#### `validateServiceClass(string $class): void`
+
+**Description:**
+Validates if the provided class is a valid GRPC service class.
+
+#### `handleGRPCException(GRPCException $e, Context $context): void`
+
+**Description:**
+Handles a GRPC exception by logging and updating the context.
 
 
 ## Troubleshooting
