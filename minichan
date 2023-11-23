@@ -14,6 +14,7 @@ use Minichan\Cli\ExceptionCommand;
 use Minichan\Cli\GrpcCommand;
 use Minichan\Cli\MiddlewareCommand;
 use Minichan\Cli\ServicesCommand;
+use Minichan\Cli\TestsCommand;
 
 $cli = new Cli();
 
@@ -24,5 +25,6 @@ $cli->addCommand(new DatabaseCommand());
 $cli->addCommand(new ExceptionCommand());
 $cli->addCommand(new MiddlewareCommand());
 $cli->addCommand(new ServicesCommand());
+$cli->addCommand(new TestsCommand());
 
 $cli->run($argv);

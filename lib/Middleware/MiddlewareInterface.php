@@ -18,5 +18,5 @@ interface MiddlewareInterface
      *
      * @return \Minichan\Grpc\MessageInterface
      */
-    public function process(\Minichan\Grpc\Request $request, \Minichan\Middleware\StackHandler $handler): \Minichan\Grpc\MessageInterface;
+    public function process(\Minichan\Grpc\Request | \Minichan\Grpc\MessageInterface $request, \Minichan\Middleware\StackHandler $handler): \Minichan\Grpc\MessageInterface;
 }

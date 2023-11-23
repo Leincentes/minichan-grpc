@@ -27,7 +27,7 @@ class ServiceHandler implements MiddlewareInterface
      *
      * @return \Minichan\Grpc\MessageInterface
      */
-    public function process(\Minichan\Grpc\Request $request, \Minichan\Grpc\RequestHandlerInterface $handler): \Minichan\Grpc\MessageInterface
+    public function process(\Minichan\Grpc\Request | \Minichan\Grpc\MessageInterface $request, \Minichan\Grpc\RequestHandlerInterface $handler): \Minichan\Grpc\MessageInterface
     {
         $result = null;
         try {

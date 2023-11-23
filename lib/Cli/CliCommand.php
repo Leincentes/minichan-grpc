@@ -8,7 +8,7 @@ class CliCommand extends Command
 {
     public function __construct()
     {
-        parent::__construct('generate:cli  ', 'Generate a new CLI class or interface');
+        parent::__construct('generate:cli', '        Generate a new CLI class or interface');
     }
 
     public function handle($args)

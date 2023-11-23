@@ -111,7 +111,7 @@ composer dump-autoload
 # Service
 ## Sample Service
 
-## AuthService Class
+### AuthService Class Creation
 
 The `AuthService` class is a service implementation that provides functionality related to user authentication. It implements the `UserServiceInterface` and offers methods for user registration, login, updating user information, deleting users, retrieving individual users, and retrieving a list of all users.
 
@@ -235,6 +235,7 @@ Retrieves a list of all users from the database.
 ## Usage
 Under the Services folder your going to create the AuthService class that will implement UserServiceInterface that the binary plugin generated.
 ```php
+// Services/AuthService.php
 declare(strict_types=1);
 
 namespace Services;
@@ -534,6 +535,8 @@ Available Commands <a name="available-commands"></a>
 Use the following command to display a list of available commands:
 ```bash
 ./minichan help
+or 
+php minichan help
 ```
 
 Command Reference <a name="command-reference"></a>

@@ -8,7 +8,7 @@ class GrpcCommand extends Command
 {
     public function __construct()
     {
-        parent::__construct('generate:grpc  ', 'Generate a new grpc-related class or interface');
+        parent::__construct('generate:grpc', '        Generate a new grpc-related class or interface');
     }
 
     public function handle($args)
