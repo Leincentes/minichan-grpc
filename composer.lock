@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a0984e12443bdd193fc35ad7421c27a",
-    "packages": [],
+    "content-hash": "362573eb9e01d76a3b71a8993bbb5b14",
+    "packages": [
+        {
+            "name": "minichan-database/minichan-database",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Leincentes/minichan-database.git",
+                "reference": "ab7c661dc5b9f222f9764365d01ce835aa5014a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Leincentes/minichan-database/zipball/ab7c661dc5b9f222f9764365d01ce835aa5014a5",
+                "reference": "ab7c661dc5b9f222f9764365d01ce835aa5014a5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "10.5.x-dev"
+            },
+            "suggest": {
+                "ext-pdo_mysql": "For MySQL or MariaDB database",
+                "ext-pdo_sqlite": "For SQLite database",
+                "ext-pdo_sqlsrv": "For MSSQL database"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Minichan\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Niel",
+                    "email": "leincentes@gmail.com"
+                }
+            ],
+            "description": "A minimal database helper.",
+            "keywords": [
+                "database",
+                "database-library"
+            ],
+            "support": {
+                "issues": "https://github.com/Leincentes/minichan-database/issues",
+                "source": "https://github.com/Leincentes/minichan-database/tree/main"
+            },
+            "time": "2023-11-24T17:23:08+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "google/protobuf",
@@ -1742,7 +1797,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "google/protobuf": 20,
-        "swoole/ide-helper": 20
+        "swoole/ide-helper": 20,
+        "phpunit/phpunit": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

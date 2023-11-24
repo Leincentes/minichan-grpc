@@ -9,7 +9,7 @@
             "Services\\": "Services/",
             "Tests\\": "tests/",
             "GPBMetadata\\Proto\\": "GPBMetadata/Proto/",
-            "PHP\\UserService\\": "PHP/UserService/"
+            "PHP\\": "PHP/"
         }
     },
     "authors": [
@@ -23,5 +23,8 @@
         "google/protobuf": "dev-master",
         "swoole/ide-helper": "dev-master",
         "phpunit/phpunit": "10.5.x-dev"
+    },
+    "require": {
+        "minichan-database/minichan-database": "dev-main"
     }
 }

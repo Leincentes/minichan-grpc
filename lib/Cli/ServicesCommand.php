@@ -65,7 +65,7 @@ class ServicesCommand extends Command
     {
         $classContent = "<?php\n\n";
         $classContent .= "declare(strict_types=1);\n";
-        $classContent .= "namespace Minichan\\Services;\n\n";
+        $classContent .= "namespace Services;\n\n";
 
         if (strtolower($type) === 'interface') {
             $classContent .= "interface $serviceName\n";
