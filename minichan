@@ -5,24 +5,25 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Minichan\Cli\Cli;
-use Minichan\Cli\CliCommand;
-use Minichan\Cli\ConfigCommand;
-use Minichan\Cli\DatabaseCommand;
-use Minichan\Cli\ExceptionCommand;
-use Minichan\Cli\GrpcCommand;
-use Minichan\Cli\MiddlewareCommand;
-use Minichan\Cli\ServicesCommand;
-use Minichan\Cli\TestsCommand;
+// use Minichan\Cli\CliCommand;
+// use Minichan\Cli\ConfigCommand;
+// use Minichan\Cli\ExceptionCommand;
+// use Minichan\Cli\GrpcCommand;
+// use Minichan\Cli\MiddlewareCommand;
+// use Minichan\Cli\ServicesCommand;
+// use Minichan\Cli\TestsCommand;
+use Minichan\Cli\ServeCommand;
 
 $cli = new Cli();
 
-$cli->addCommand(new CliCommand());
-$cli->addCommand(new GrpcCommand());
-$cli->addCommand(new ConfigCommand());
-$cli->addCommand(new DatabaseCommand());
-$cli->addCommand(new ExceptionCommand());
-$cli->addCommand(new MiddlewareCommand());
-$cli->addCommand(new ServicesCommand());
-$cli->addCommand(new TestsCommand());
+// $cli->addCommand(new CliCommand());
+// $cli->addCommand(new GrpcCommand());
+// $cli->addCommand(new ConfigCommand());
+// $cli->addCommand(new ExceptionCommand());
+// $cli->addCommand(new MiddlewareCommand());
+// $cli->addCommand(new ServicesCommand);
+// $cli->addCommand(new TestsCommand());
+
+$cli->addCommand(new ServeCommand());
 
 $cli->run($argv);

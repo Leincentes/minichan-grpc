@@ -52,7 +52,8 @@ class Cli
         foreach ($this->commands as $command) {
             echo "  " . $command->signature . "\t" . $command->description . "\n";
         }
-        echo "\nExample:\n \nphp minichan generate:config MyClass Class\nphp minichan generate:config MyInterface Interface\n";
+        // echo "\nExample:\n \nphp minichan generate:config MyClass Class\nphp minichan generate:config MyInterface Interface\nphp minichan serve\n";
+        echo "\nExample:\nphp minichan serve\n";
     }
 
     /**

@@ -422,17 +422,18 @@ class Config
 ```
 
 ## Basic gRPC Server
-In the root directory you will find the run.php
 All you needed to do is to execute the file.
 ```php
-// run.php
+// serve.php
 
 declare(strict_types= 1);
 
 use Minichan\Config\Config;
 use Minichan\Config\Constant;
 
-require_once './vendor/autoload.php';
+! defined('BASE_PATH') && define('BASE_PATH', dirname(__DIR__, 1));
+
+require_once BASE_PATH . '/vendor/autoload.php';
 
 // Create a gRPC server instance with the specified host, port, and Swoole mode
 $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_PORT, SWOOLE_BASE))
@@ -450,14 +451,17 @@ $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_POR
 
     // Set additional server options
     ->set([
-        'worker_num' => 4,                  // Number of worker processes
+        'worker_num' => 6,                  // Number of worker processes
         'open_http2_protocol' => 1,         // Enable HTTP2 protocol
         'enable_coroutine' => true,         // Enable coroutine support
     ]);
 
-// Start the gRPC server
 $server->start();
 
+```
+## To Serve
+```bash
+php minichan serve
 ```
 
 ## Basic gRPC Client
@@ -539,62 +543,10 @@ or
 php minichan help
 ```
 
-Command Reference <a name="command-reference"></a>
-
-generate:cli <a name="generate-cli"></a>
-Generate a new CLI class or interface.
+### Serve
+To serve the server simply type or copy the command below in the terminal.
 ```bash
-./minichan generate:cli [CliName] [Interface|Class]
-or
-php minichan generate:cli [CliName] [Interface|Class]
-```
-
-generate:config <a name="generate-config"></a>
-Generate a new configuration class or interface.
-```bash
-./minichan generate:config [ConfigName] [Interface|Class]
-or
-php minichan generate:config [ConfigName] [Interface|Class]
-```
-
-generate:database <a name="generate-database"></a>
-Generate a new database-related class or interface.
-```bash
-./minichan generate:database [DatabaseName] [Interface|Class]
-or
-php minichan generate:database [DatabaseName] [Interface|Class]
-```
-
-generate:exception <a name="generate-exception"></a>
-Generate a new exception class or interface.
-```bash
-./minichan generate:exception [ExceptionName] [Interface|Class]
-or
-php minichan generate:exception [ExceptionName] [Interface|Class]
-```
-
-generate:grpc <a name="generate-grpc"></a>
-Generate a new grpc-related class or interface.
-```bash
-./minichan generate:grpc [GrpcName] [Interface|Class]
-or
-php minichan generate:grpc [GrpcName] [Interface|Class]
-```
-
-generate:middleware <a name="generate-middleware"></a>
-Generate a new middleware class or interface.
-```bash
-./minichan generate:middleware [MiddlewareName] [Interface|Class]
-or
-php minichan generate:middleware [MiddlewareName] [Interface|Class]
-```
-
-generate:services <a name="generate-services"></a>
-Generate a new services-related class or interface.
-```bash
-./minichan generate:services [ServicesName] [Interface|Class]
-or
-php minichan 
+php minichan serve
 ```
 
 # Config
