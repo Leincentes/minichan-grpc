@@ -74,7 +74,7 @@ service Stream {
 
 Then use protoc to generate the code:
 ```bash
-protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=lib/Bin/minichan proto/userauth.proto
+protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=lib/Bin/minichan-grpc proto/userauth.proto
 ```
 When the command is executed, the following files will be generated in the current directory:
 ```bash
