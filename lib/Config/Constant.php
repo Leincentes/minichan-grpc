@@ -42,9 +42,4 @@ final class Constant
     public const SERVER_HOST = '127.0.0.1';
 
     public const SERVER_PORT = 9502;
-
-    public const DB_HOST = 'localhost';
-    public const DB_USERNAME = 'root';
-    public const DB_PASSWORD = '';
-    public const DB_DATABASE = '';
 }
