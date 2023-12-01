@@ -12,7 +12,6 @@ A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code gener
 - [CLI minichan](#cli-minichan)
 - [Usage](#usage)
 - [Config](#config)
-- [Database](#database)
 - [Middleware](#middleware)
 - [Server Class](#server-class)
 
@@ -388,6 +387,9 @@ class AuthService implements UserServiceInterface
 }
 
 ```
+## Add the configuration of your desired database.
+### 
+Database hadler dependency reference: https://github.com/Leincentes/minichan-database
 
 ## Add the Service in the Config
 In the folder Services you'll find Cofig folder where Config.php reside. This is where you can register the Service you created.
