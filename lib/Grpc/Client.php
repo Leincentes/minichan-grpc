@@ -14,7 +14,7 @@ class Client implements ClientInterface
     private $closed = false;
     private $mode;
     private $settings = [
-        'timeout'                      => 3,
+        'timeout'                      => 4,
         'open_eof_check'               => true,
         'package_max_length'           => 2 * 1024 * 1024,
         'http2_max_concurrent_streams' => 1000,

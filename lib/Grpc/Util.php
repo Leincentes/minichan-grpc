@@ -3,6 +3,8 @@
 declare(strict_types=1);
 namespace Minichan\Grpc;
 
+use Minichan\Config\Status;
+
 /**
  * 
  *
@@ -21,46 +23,6 @@ class Util
     }
 
     /**
-     * Get the number of CPUs.
-     *
-     * @return int
-     */
-    public static function getCPUNum(): int
-    {
-        return \Swoole\Coroutine::getCid();
-    }
-
-    /**
-     * Get the local IP addresses.
-     *
-     * @return array
-     */
-    public static function getLocalIp(): array
-    {
-        return ['127.0.0.1'];
-    }
-
-    /**
-     * Get the local MAC addresses.
-     *
-     * @return array
-     */
-    public static function getLocalMac(): array
-    {
-        return ['00:00:00:00:00:00'];
-    }
-
-    /**
-     * Get the last error code.
-     *
-     * @return int
-     */
-    public static function getLastErrorCode(): int
-    {
-        return 0;
-    }
-
-    /**
      * Get the error message for a given error code and type.
      *
      * @param int $errorCode
@@ -72,24 +34,7 @@ class Util
     {
         return 'Error Message';
     }
-
-    /**
-     * Get the error code.
-     *
-     * @return int
-     */
-    public static function errorCode(): int
-    {
-        return 0;
-    }
-
-    /**
-     * Clear the error state.
-     */
-    public static function clearError(): void
-    {
-    }
-
+    
     /**
      * Log a message at the specified level.
      *
@@ -98,7 +43,31 @@ class Util
      */
     public static function log(int $level, string $message): void
     {
-        echo "\033[32m{$message}\033[0m\n";
+        switch ($level) {
+            case Status::OK:
+                $color = "\033[32m"; // Green
+                break;
+            case Status::CANCELLED:
+                $color = "\033[33m"; // Yellow
+                break;
+            case Status::UNKNOWN:
+            case Status::INVALID_ARGUMENT:
+            case Status::DEADLINE_EXCEEDED:
+            case Status::NOT_FOUND:
+            case Status::ALREADY_EXISTS:
+            case Status::UNIMPLEMENTED:
+            case Status::INTERNAL:
+            case Status::UNAVAILABLE:
+                $color = "\033[31m"; // Red
+                break;
+            case Status::LOG:
+                $color = "\033[32m";
+                break;
+            default:
+                $color = "\033[0m"; // Reset color
+                break;
+        }
+        echo "{$color}{$message}\033[0m\n";
     }
 
     /**

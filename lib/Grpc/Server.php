@@ -43,17 +43,46 @@ final class Server
      */
     public function __construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)
     {
-        $this->host     = $host;
-        $this->port     = $port;
-        $this->mode     = $mode;
+        $this->host = $host;
+        $this->port = $port;
+        $this->mode = $mode;
         $this->sockType = $sockType;
 
         $server = new \Swoole\Http\Server($this->host, $this->port, $this->mode, $this->sockType);
-        $server->on('start', function () {
-            Util::log(SWOOLE_LOG_INFO, "GRPC Server Started: {$this->host}:{$this->port}");
+        $server->on('start', function (\Swoole\Http\Server $server) {
+            $this->handleServerStart($server);
         });
-        $this->server   = $server;
-        $this->handler  = (new StackHandler())->add(new ServiceHandler());
+        $this->server = $server;
+        $this->handler = (new StackHandler())->add(new ServiceHandler());
+    }
+
+    /**
+     * Handle the server start event.
+     *
+     * @param \Swoole\Http\Server $server
+     *
+     * @return void
+     */
+    private function handleServerStart(\Swoole\Http\Server $server): void
+    {
+        $address = $server->host;
+        $port = $server->port;
+        $startTime = date('Y-m-d H:i:s');
+        $workerNum = $server->setting['worker_num'];
+        $taskWorkerNum = $server->setting['task_worker_num'];
+        $enableCoroutine = $server->setting['enable_coroutine'];
+        $maxConnections = $server->setting['max_connection'];
+
+        $serverInfo = "GRPC Server Started:\n";
+        $serverInfo .= "  Host: $address\n";
+        $serverInfo .= "  Port: $port\n";
+        $serverInfo .= "  Start Time: $startTime\n";
+        $serverInfo .= "  Worker Processes: $workerNum\n";
+        $serverInfo .= "  Task Worker Processes: $taskWorkerNum\n";
+        $serverInfo .= "  Coroutine Enabled: " . ($enableCoroutine ? 'Yes' : 'No') . "\n";
+        $serverInfo .= "  Max Connections: $maxConnections\n";
+
+        Util::log(Status::LOG, $serverInfo);
     }
 
     /**
