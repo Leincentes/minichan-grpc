@@ -20,13 +20,9 @@ $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_POR
     })
 
     // Add middlewares defined in the configuration
-    ->addMiddlewares(Config::getMiddlewares())
+    ->addMiddlewares(Config::getMiddlewares());
 
-    // Set additional server options
-    ->set([
-        'worker_num' => 4,                  // Number of worker processes
-        'open_http2_protocol' => 1,         // Enable HTTP2 protocol
-        'enable_coroutine' => true,         // Enable coroutine support
-    ]);
+// Set additional server options
+Config::setOptions($server);
 
 $server->start();

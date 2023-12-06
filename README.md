@@ -14,6 +14,7 @@ A PHP gRPC library utilizing Swoole coroutines, encompassing a protoc code gener
 - [Config](#config)
 - [Middleware](#middleware)
 - [Server Class](#server-class)
+- [Troubleshooting](#troubleshooting)
 
 # INSTALLATION
 Swoole >= 5.1.0: https://wiki.swoole.com/#/environment
@@ -21,9 +22,9 @@ It needs to be turned on --enable-http2
 
 [Protoc](https://github.com/protocolbuffers/protobuf) is a code generator for protobuf data structures, tasked with converting .proto files into language-specific classes and structs for program implementation.
 
-[minichan]() is a protoc plug-in created by the grpc library, designed to generate server and client code for services.
+[minichan-grpc]() is a protoc plug-in created by the grpc library, designed to generate server and client code for services.
 
-## GENERATE PHP CODE via .proto
+# GENERATE PHP CODE via .proto
 
 ```proto
 
@@ -389,7 +390,7 @@ class AuthService implements UserServiceInterface
 ```
 ## Add the configuration of your desired database.
 ### 
-Database hadler dependency reference: https://github.com/Leincentes/minichan-database
+Database handler dependency reference: https://github.com/Leincentes/minichan-database
 
 ## Add the Service in the Config
 In the folder Services you'll find Cofig folder where Config.php reside. This is where you can register the Service you created.
@@ -423,7 +424,7 @@ class Config
 
 ```
 
-## Basic gRPC Server
+# Basic gRPC Server
 All you needed to do is to execute the file.
 ```php
 // serve.php
@@ -466,7 +467,7 @@ $server->start();
 php minichan serve
 ```
 
-## Basic gRPC Client
+# Basic gRPC Client
 A basic example how the client will be handled.
 ```php
 // client.php
@@ -525,7 +526,6 @@ Co::create(function () {
 
 ```
 
-
 # CLI minichan
 A command-line minichan interface is for generating various classes and interfaces. This tool aims to streamline the process of creating classes and interfaces.
 
@@ -554,7 +554,7 @@ php minichan serve
 # Config
 The Config class is a configuration class within the Minichan\Config namespace. Its purpose is to define gRPC services and middlewares for a PHP application. This class is designed to be static, providing methods to retrieve arrays of gRPC services and middlewares.
 
-**`Class` Declaration**
+## **`Class` Declaration**
 ```php
     declare(strict_types=1);
 
@@ -573,6 +573,8 @@ The Config class is a configuration class within the Minichan\Config namespace. 
         // Class implementation...
     }
 ```
+
+## getServices
 The **`getServices`** method is responsible for returning an array of gRPC services that should be registered in the application. In the provided code, it returns an array containing the **...\Services\Config\Config::registerServices()** class. This assume that in the **Services\Config\Config** file have a register Service.
 
 ```php
@@ -589,6 +591,7 @@ The **`getServices`** method is responsible for returning an array of gRPC servi
     }
 ```
 
+## getMiddlewares
 The **`getMiddlewares`** method returns an array of middleware instances that should be added to the application. In the provided code, it returns instances of LoggingMiddleware and TraceMiddleware. These classes are assumed to be middleware components that provide logging and tracing functionality, respectively.
 
 ```php
@@ -683,17 +686,17 @@ The **`ServiceHandler`** already have it's instance in the StackHandler in Serve
      */
     public function __construct(string $host, int $port = 0, int $mode = SWOOLE_TCP, int $sockType = SWOOLE_SOCK_TCP)
     {
-        $this->host     = $host;
-        $this->port     = $port;
-        $this->mode     = $mode;
+        $this->host = $host;
+        $this->port = $port;
+        $this->mode = $mode;
         $this->sockType = $sockType;
 
         $server = new \Swoole\Http\Server($this->host, $this->port, $this->mode, $this->sockType);
-        $server->on('start', function () {
-            Util::log(SWOOLE_LOG_INFO, "GRPC Server Started: {$this->host}:{$this->port}");
+        $server->on('start', function (\Swoole\Http\Server $server) {
+            $this->handleServerStart($server);
         });
-        $this->server   = $server;
-        $this->handler  = (new StackHandler())->add(new ServiceHandler());
+        $this->server = $server;
+        $this->handler = (new StackHandler())->add(new ServiceHandler());
     }
 ```
 
@@ -809,7 +812,7 @@ Validates if the provided class is a valid GRPC service class.
 Handles a GRPC exception by logging and updating the context.
 
 
-## Troubleshooting
+# Troubleshooting
 If you encounter issues while using , consider the following steps:
 
 1. Check the Command Syntax: Ensure that you are using the correct syntax for the command.
