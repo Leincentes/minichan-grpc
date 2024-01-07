@@ -14,12 +14,12 @@ class Client implements ClientInterface
     private $closed = false;
     private $mode;
     private $settings = [
-        'timeout'                      => 4,
-        'open_eof_check'               => true,
-        'package_max_length'           => 2 * 1024 * 1024,
-        'http2_max_concurrent_streams' => 1000,
-        'http2_max_frame_size'         => 2 * 1024 * 1024,
-        'max_retries'                  => 10,
+        'timeout'                      => Constant::TIMEOUT,
+        'open_eof_check'               => Constant::OPEN_EOF_CHECK,
+        'package_max_length'           => Constant::PACKAGE_MAX_LENGTH,
+        'http2_max_concurrent_streams' => Constant::HTTP2_MAX_CONCURRENT_STREAMS,
+        'http2_max_frame_size'         => Constant::HTT2_MAX_FRAME_SIZE,
+        'max_retries'                  => Constant::MAX_RETRIES,
     ];
 
     public function __construct($host, $port, $mode = Constant::GRPC_CALL)
@@ -194,34 +194,44 @@ class Client implements ClientInterface
      * Receive data from the client.
      *
      * @return array
+     * @throws ClientException
      */
     private function recvData()
     {
-        if ($this->mode === Constant::GRPC_CALL) {
-            $response = $this->client->recv(30);
-        } else {
-            $response = $this->client->read(30);
-        }
-
-        if (!$response) {
-            // Handle errors and wait before retrying
-            if ($this->client->errCode > 0) {
-                throw new ClientException(Util::getErrorMessage($this->client->errCode, 9) . " {$this->client->host}:{$this->client->port}", $this->client->errCode);
+        try {
+            if ($this->mode === Constant::GRPC_CALL) {
+                $response = $this->client->recv($this->settings['timeout']);
+            } else {
+                $response = $this->client->read($this->settings['timeout']);
             }
 
-            Coroutine::sleep(1);
-            return [0, null, false, null];
-        }
+            if (!$response) {
+                if ($this->client->errCode > 0) {
+                    // Log the error instead of throwing an exception
+                    error_log(Util::getErrorMessage($this->client->errCode, 9) . " {$this->client->host}:{$this->client->port}");
+                }
 
-        if ($response && $response->data) {
-            $data = substr($response->data, 5);
-            $trailers = ['grpc-status' => $response->headers['grpc-status'] ?? '0', 'grpc-message' => $response->headers['grpc-message'] ?? ''];
+                Coroutine::sleep(1);
+                return [0, null, false, null];
+            }
 
-            return [$response->streamId, $data, $response->pipeline, $trailers];
+            if ($response->data) {
+                $data = substr($response->data, 5);
+                $trailers = [
+                    'grpc-status' => $response->headers['grpc-status'] ?? '0',
+                    'grpc-message' => $response->headers['grpc-message'] ?? '',
+                ];
+
+                return [$response->streamId, $data, $response->pipeline, $trailers];
+            }
+        } catch (\Throwable $e) {
+            // Log the error instead of throwing an exception
+            error_log($e->getMessage());
         }
 
         return [0, null, false, null];
     }
+    
     
     /**
      * Set the HTTP client for the gRPC client.

@@ -42,4 +42,14 @@ final class Constant
     public const SERVER_HOST = '127.0.0.1';
 
     public const SERVER_PORT = 9502;
+
+    /**
+     * Client Settings
+     */
+    public const TIMEOUT = 10;
+    public const OPEN_EOF_CHECK = true;
+    public const PACKAGE_MAX_LENGTH = 2 * 1024 * 1024;
+    public const HTTP2_MAX_CONCURRENT_STREAMS = 1000;
+    public const HTT2_MAX_FRAME_SIZE = 2 * 1024 * 1024;
+    public const MAX_RETRIES = 10;
 }

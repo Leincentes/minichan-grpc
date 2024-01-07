@@ -37,37 +37,27 @@ class LoggingMiddleware implements \Minichan\Middleware\MiddlewareInterface
 
         // Log timestamp
         $timestamp = date('Y-m-d H:i:s');
-
         // Log GRPC request details with additional information
         Util::log(
             Status::LOG,
             "{$timestamp} - GRPC request: {$client}->{$server}, stream({$streamId}), {$httpMethod} {$requestUri}, User-Agent: {$ua}"
         );
-        print("=======================================================\n");
         // Log request headers without backslashes
         Util::log(Status::LOG, "Request Headers: " . stripslashes(json_encode($requestHeaders, JSON_PRETTY_PRINT)));
-        print("=======================================================\n");
-
         // Log encrypted request payload if present
         if (!empty($requestPayload)) {
             $encryptedPayload = $this->encryptPayload($requestPayload);
             Util::log(Status::LOG, "Encrypted Request Payload: " . base64_encode($encryptedPayload));
         }
-        print("=======================================================\n");
-
         // Continue handling the request in the middleware stack
         $startTime = microtime(true);
         $response = $handler->handle($request);
         $executionTime = microtime(true) - $startTime;
-
         // Log response status
         $responseStatus = $context->getValue(Constant::GRPC_STATUS);
-        Util::log(Status::LOG, "Response Status: {$responseStatus}");
-        print("=======================================================\n");
-
+        Util::log(Status::LOG, "GRPC Response Status: {$responseStatus}");
         // Log execution time
         Util::log(Status::LOG, "Execution Time: " . number_format($executionTime, 4) . " seconds");
-        print("=======================================================\n");
 
         return $response;
     }

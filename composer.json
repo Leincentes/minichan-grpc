@@ -7,9 +7,9 @@
         "psr-4": {
             "Minichan\\": "lib/",
             "Services\\": "Services/",
-            "Tests\\": "tests/",
             "GPBMetadata\\Proto\\": "GPBMetadata/Proto/",
-            "PHP\\": "PHP/"
+            "PHP\\": "PHP/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [

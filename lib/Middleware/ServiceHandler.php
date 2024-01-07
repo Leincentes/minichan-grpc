@@ -46,19 +46,15 @@ class ServiceHandler implements MiddlewareInterface
             // Update the context with a successful status
             $context = $context->withValue(Constant::GRPC_STATUS, Status::OK);
         } catch (GRPCException $e) {
-            // Log and handle GRPC-specific exceptions
             $this->handleException($e, $context);
             $output = '';
         } catch (\Swoole\Exception $e) {
-            // Log and handle Swoole-specific exceptions
             $this->handleException($e, $context);
             $output = '';
         } catch (Throwable $e) {
-            // Log and handle other exceptions
             throw InvokeException::create($e->getMessage(), Status::INTERNAL, $e);
         }
 
-        // Return the response with the updated context and output
         return new Response($context, $output);
     }
 
