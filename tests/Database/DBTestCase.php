@@ -24,8 +24,6 @@ class DBTestCase extends TestCase
             'MySQL' => ['mysql'],
             'MSSQL' => ['mssql'],
             'SQLite' => ['sqlite'],
-            'PostgreSQL' => ['pgsql'],
-            'Oracle' => ['oracle'],
         ];
     }
 

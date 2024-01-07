@@ -16,7 +16,7 @@ class GrpcTest extends \PHPUnit\Framework\TestCase
     {
         // Arrange
         $errorMessage = 'An error occurred during GRPC operation';
-        $errorCode = 123; // You can set a specific error code for testing
+        $errorCode = 123; 
         $previousException = new \Exception('Previous exception for testing');
 
         // Act

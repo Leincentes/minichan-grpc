@@ -8,7 +8,6 @@ use Minichan\Database\Database;
 class UpdateTest extends \Tests\Database\DBTestCase
 {
     /**
-     * @covers \Medoo\Medoo::update()
      * @dataProvider typesProvider
      */
     public function testUpdate($type)

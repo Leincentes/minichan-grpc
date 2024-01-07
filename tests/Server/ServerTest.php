@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Minichan\Grpc\Server;
-use Minichan\Grpc\ServiceContainer;
 use Minichan\Middleware\LoggingMiddleware;
 use Minichan\Middleware\StackHandler;
 use PHPUnit\Framework\TestCase;
