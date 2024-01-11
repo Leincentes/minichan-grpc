@@ -32,51 +32,20 @@ class LoggingMiddleware implements \Minichan\Middleware\MiddlewareInterface
         $ua = $rawRequest->header['user-agent'];
         $httpMethod = $rawRequest->server['request_method'];
         $requestUri = $rawRequest->server['request_uri'];
-        $requestHeaders = $rawRequest->header;
-        $requestPayload = $rawRequest->getContent();
 
-        // Log timestamp
         $timestamp = date('Y-m-d H:i:s');
         // Log GRPC request details with additional information
         Util::log(
             Status::LOG,
             "{$timestamp} - GRPC request: {$client}->{$server}, stream({$streamId}), {$httpMethod} {$requestUri}, User-Agent: {$ua}"
         );
-        // Log request headers without backslashes
-        Util::log(Status::LOG, "Request Headers: " . stripslashes(json_encode($requestHeaders, JSON_PRETTY_PRINT)));
-        // Log encrypted request payload if present
-        if (!empty($requestPayload)) {
-            $encryptedPayload = $this->encryptPayload($requestPayload);
-            Util::log(Status::LOG, "Encrypted Request Payload: " . base64_encode($encryptedPayload));
-        }
-        // Continue handling the request in the middleware stack
+
         $startTime = microtime(true);
         $response = $handler->handle($request);
         $executionTime = microtime(true) - $startTime;
-        // Log response status
-        $responseStatus = $context->getValue(Constant::GRPC_STATUS);
-        Util::log(Status::LOG, "GRPC Response Status: {$responseStatus}");
-        // Log execution time
+        
         Util::log(Status::LOG, "Execution Time: " . number_format($executionTime, 4) . " seconds");
 
         return $response;
-    }
-
-    /**
-     * Encrypt the payload.
-     *
-     * @param string $payload
-     *
-     * @return string
-     */
-    private function encryptPayload(string $payload): string
-    {
-        // Use a secure encryption algorithm and key management in a real-world scenario
-        $encryptionKey = 'test-encrypt';
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-
-        $encryptedPayload = openssl_encrypt($payload, 'aes-256-cbc', $encryptionKey, 0, $iv);
-
-        return $iv . $encryptedPayload;
     }
 }
