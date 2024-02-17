@@ -27,3 +27,13 @@ We've included JMeter test cases to ensure the performance and reliability of mi
 
 #### Statistics Analysis:
 ![Statistics Analysis](/assets/Statistics.png)
+
+## Sample Application
+
+To demonstrate the capabilities of minichan-v1, we've included a sample login and register application. This application showcases how to use the minichan-v1 library to implement user authentication and registration using gRPC.
+
+[**Login|Register Form**](https://github.com/Leincentes/login-register-form)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

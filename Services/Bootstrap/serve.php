@@ -18,7 +18,7 @@ $server = (new \Minichan\Grpc\Server(Constant::SERVER_HOST, Constant::SERVER_POR
     ->withWorkerContext('worker_start_time', function () {
         return time();
     })
-
+    
     // Add middlewares defined in the configuration
     ->addMiddlewares(Config::getMiddlewares());
 

@@ -8,6 +8,7 @@ use Minichan\Config\Constant;
 use Minichan\Config\Status;
 use Minichan\Exception\GRPCException;
 use Minichan\Exception\InvokeException;
+use Minichan\Exception\TransientFailureException;
 use Minichan\Middleware\MiddlewareInterface;
 use Minichan\Middleware\ServiceHandler;
 use Minichan\Middleware\StackHandler;

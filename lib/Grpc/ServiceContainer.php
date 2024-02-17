@@ -29,8 +29,8 @@ final class ServiceContainer
     /**
      * ServiceContainer constructor.
      *
-     * @param string            $interface The interface name.
-     * @param ServiceInterface  $service   The service instance.
+     * @param string            $interface 
+     * @param ServiceInterface  $service   
      *
      * @throws InvokeException If there is an issue with service discovery.
      */
@@ -141,7 +141,6 @@ final class ServiceContainer
             // Execute the method and get the result.
             $result = $callable($context, $message);
         } catch (TypeError $e) {
-            // Handle type error.
             throw InvokeException::create($e->getMessage(), Status::INTERNAL, $e);
         }
 
@@ -153,7 +152,6 @@ final class ServiceContainer
                 $output = $result->serializeToJsonString();
             }
         } catch (Throwable $e) {
-            // Handle serialization error.
             throw InvokeException::create($e->getMessage(), Status::INTERNAL, $e);
         }
 

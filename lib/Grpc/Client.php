@@ -206,10 +206,10 @@ class Client implements ClientInterface
             }
 
             if (!$response) {
-                if ($this->client->errCode > 0) {
-                    // Log the error instead of throwing an exception
-                    error_log(Util::getErrorMessage($this->client->errCode, 9) . " {$this->client->host}:{$this->client->port}");
-                }
+                // if ($this->client->errCode > 0) {
+                //     // Log the error instead of throwing an exception
+                //     error_log(Util::getErrorMessage($this->client->errCode, 9) . " {$this->client->host}:{$this->client->port}");
+                // }
 
                 Coroutine::sleep(1);
                 return [0, null, false, null];
@@ -225,7 +225,6 @@ class Client implements ClientInterface
                 return [$response->streamId, $data, $response->pipeline, $trailers];
             }
         } catch (\Throwable $e) {
-            // Log the error instead of throwing an exception
             error_log($e->getMessage());
         }
 

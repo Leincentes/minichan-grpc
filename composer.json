@@ -17,6 +17,7 @@
             "name": "Niel",
             "email": "leincentes@gmail.com"
         }
+    
     ],
     "minimum-stability": "dev",
     "require-dev": {
