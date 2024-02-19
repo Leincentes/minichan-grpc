@@ -6,7 +6,7 @@ use Minichan\Grpc\Server;
 use Minichan\Middleware\LoggingMiddleware;
 use Minichan\Middleware\StackHandler;
 use PHPUnit\Framework\TestCase;
-use Services\AuthService;
+use Tests\AuthService;
 
 class ServerTest extends TestCase
 {
