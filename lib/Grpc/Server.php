@@ -70,7 +70,6 @@ final class Server
         $port = $server->port;
         $startTime = date('Y-m-d H:i:s');
         $workerNum = $server->setting['worker_num'];
-        $taskWorkerNum = $server->setting['task_worker_num'];
         $enableCoroutine = $server->setting['enable_coroutine'];
         $maxConnections = $server->setting['max_connection'];
 
@@ -79,7 +78,6 @@ final class Server
         $serverInfo .= "  Port: $port\n";
         $serverInfo .= "  Start Time: $startTime\n";
         $serverInfo .= "  Worker Processes: $workerNum\n";
-        $serverInfo .= "  Task Worker Processes: $taskWorkerNum\n";
         $serverInfo .= "  Coroutine Enabled: " . ($enableCoroutine ? 'Yes' : 'No') . "\n";
         $serverInfo .= "  Max Connections: $maxConnections\n";
 
