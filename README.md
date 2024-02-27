@@ -33,6 +33,7 @@ We've included JMeter test cases to ensure the performance and reliability of mi
 To demonstrate the capabilities of minichan-v1, we've included a sample login and register application. This application showcases how to use the minichan-v1 library to implement user authentication and registration using gRPC.
 
 [**Login|Register Form**](https://github.com/Leincentes/login-register-form/tree/main/app)
+<br>
 [**End-to-End Chatapp**](https://github.com/Leincentes/end-to-end-chat-app/tree/main/app)
 
 
