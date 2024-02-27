@@ -1,0 +1,127 @@
+@include('header')
+<style>
+.emoticons-container {
+  display: none;
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.emoticon-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
+.emoticons-container.visible {
+  display: flex;
+}
+
+.emoticons-container .emoticon {
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.emoticon-wrapper label.emoticon-toggle-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.emoticon-wrapper label.emoticon-toggle-btn i {
+  color: #999;
+  font-size: 24px;
+}
+
+.emoticon-wrapper label.emoticon-toggle-btn:hover i {
+  color: #555;
+}
+
+</style>
+<body>
+  <div class="wrapper">
+    <section class="chat-area">
+      <header>
+        <a href="/home" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+        <img src="views/img/{{ $image }}" alt="">
+        <div class="details">
+          <span>{{ $username }}</span>
+          <p>{{ $status }}</p>
+        </div>
+      </header>
+      <div class="chat-box">
+
+      </div>
+      <div style="display: flex; ">
+        <form action="#" class="typing-area">
+          <input type="text" class="incoming_id" name="incoming_id" value="{{$userId}}" hidden>
+          <input type="text" name="message" class="input-field" id="messageInput" placeholder="Type a message here..." autocomplete="off">
+          <button><i class="fab fa-telegram-plane"></i></button>
+        </form>
+        <div class="emoticon-wrapper">
+          <label class="emoticon-toggle-btn"><i class="fas fa-smile"></i></label>
+        </div>
+      </div>
+
+      <div class="emoticons-container">
+        <span class="emoticon">😊</span>
+        <span class="emoticon">😂</span>
+        <span class="emoticon">❤️</span>
+        <span class="emoticon">😍</span>
+        <span class="emoticon">😊</span>
+        <span class="emoticon">😉</span>
+        <span class="emoticon">😭</span>
+        <span class="emoticon">🥰</span>
+        <span class="emoticon">😎</span>
+        <span class="emoticon">😁</span>
+      </div>
+
+    </section>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const inputField = document.getElementById("messageInput");
+    const emoticonsContainer = document.querySelector(".emoticons-container");
+    const emoticonToggleBtn = document.querySelector(".emoticon-toggle-btn");
+
+    emoticonsContainer.classList.remove("visible");
+
+    emoticonToggleBtn.addEventListener("click", function(event) {
+      event.stopPropagation(); 
+      emoticonsContainer.classList.toggle("visible");
+    });
+
+    emoticonsContainer.addEventListener("click", function(event) {
+      if (event.target.classList.contains("emoticon")) {
+        const emoticonText = event.target.textContent;
+        const currentPosition = inputField.selectionStart;
+        const message = inputField.value;
+        const newMessage = message.slice(0, currentPosition) + emoticonText + message.slice(currentPosition);
+        inputField.value = newMessage;
+        inputField.focus();
+        emoticonsContainer.classList.remove("visible");
+      }
+    });
+
+    document.addEventListener("click", function(event) {
+      if (!emoticonsContainer.contains(event.target) && event.target !== emoticonToggleBtn && event.target !== inputField) {
+        emoticonsContainer.classList.remove("visible");
+      }
+    });
+  });
+
+  </script>
+  <script src="views/js/chat.js"></script>
+
+</body>
+</html> 
