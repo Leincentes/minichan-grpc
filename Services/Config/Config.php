@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Services\Config;
 
+use Services\ChatAppService;
+
 /**
  * Configuration class for defining gRPC services.
  */
@@ -18,7 +20,7 @@ class Config
     {
         // Add your services here
         return [
-            
+            ChatAppService::class,
         ];
     }
 }
