@@ -34,7 +34,7 @@ To demonstrate the capabilities of minichan-v1, we've included a sample login an
 
 [**Login|Register Form**](https://github.com/Leincentes/minichan-grpc/tree/login-register-sample/app)
 <br>
-[**End-to-End Chatapp**](https://github.com/Leincentes/end-to-end-chat-app/tree/main/app)
+[**End-to-End Chatapp**](http://github.com/Leincentes/end-to-end-chat-app/tree/main/app)
 
 
 ## License
