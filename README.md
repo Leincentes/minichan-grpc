@@ -36,9 +36,6 @@ To demonstrate the capabilities of minichan-v1, we've included a sample.
 <br>
 
 [**End-to-End Chatapp**](https://github.com/Leincentes/minichan-grpc/tree/chatapp-sample/app)
-### Demonstration
-[**End-To-End Chat**](http://ec2-52-199-83-33.ap-northeast-1.compute.amazonaws.com/)
-
 
 ## License
 
