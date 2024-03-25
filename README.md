@@ -26,7 +26,7 @@ We've included JMeter test cases to ensure the performance and reliability of mi
 ![Test Plan Overview](/assets/Overall.png)
 
 #### Statistics Analysis:
-![Statistics Analysis](/assets/Statistics.png)
+![Statistics Analysis](/assets/statistics.png)
 
 ## Sample Application
 
