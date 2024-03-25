@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Services\Config;
 
-use Services\AuthService;
-
 /**
  * Configuration class for defining gRPC services.
  */
