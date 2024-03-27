@@ -25,6 +25,10 @@ To get started, follow these steps:
 3. **Run the Application:**
    - Execute `php app/App.php` to start the application.
 
+### Blog
+
+Blog link: **https://medium.com/@leincano/building-an-end-to-end-chat-application-with-minichan-v1-39510b388bfe**
+
 ### Demonstration
 
 Demo link: **http://ec2-18-183-233-22.ap-northeast-1.compute.amazonaws.com/**
