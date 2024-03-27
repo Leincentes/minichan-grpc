@@ -55,27 +55,15 @@ class ChatAppService implements ChatAppServiceInterface {
     public function Login(\Minichan\Grpc\ContextInterface $ctx, \PHP\ChatApp\Users $request): Response {
         try {
             $this->db->update('users', ['status' => $request->getStatus()], ['username' => $request->getUsername()]);
-            $data = $this->db->query("SELECT * FROM users WHERE username = '{$request->getUsername()}'");
-            if ($data->rowCount() === 0) {
-                throw new \Minichan\Exception\NotFoundException('User not found.');
-            } 
-            
-            $loggedIn = false;
-            foreach ($data as $user) {
-                if (password_verify($request->getPassword(), $user['password'])) {
-                    $request->setUsername($user['username'])
-                            ->setImage($user['image'])
-                            ->setStatus($user['status'])
-                            ->setUniqueId($user['unique_id']);
-                    
-                    $this->res->setSuccessOrError(true);
-                    $loggedIn = true;
-                    break; 
-                }
-            }
-            
-            if (!$loggedIn) {
-                throw new \Minichan\Exception\InvalidArgumentException('Incorrect password.');
+            $user = $this->db->query("SELECT * FROM users WHERE username = '{$request->getUsername()}'")->fetch();
+
+            if (password_verify($request->getPassword(), $user['password'])) {
+                $request->setUsername($user['username'])
+                        ->setImage($user['image'])
+                        ->setStatus($user['status'])
+                        ->setUniqueId($user['unique_id']);
+                
+                $this->res->setSuccessOrError(true);
             }
             
             return $this->res->setUser($request);
@@ -84,7 +72,6 @@ class ChatAppService implements ChatAppServiceInterface {
             return $this->res;
         }
     }
-    
 
     public function Logout(\Minichan\Grpc\ContextInterface $ctx, \PHP\ChatApp\Users $request): Response {
         $data = $this->db->update('users', ['status' => $request->getStatus()], ['unique_id' => $request->getUniqueId()]);
