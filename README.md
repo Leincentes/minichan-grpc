@@ -26,14 +26,11 @@ We've included JMeter test cases to ensure the performance and reliability of mi
 ![Test Plan Overview](/assets/Overall.png)
 
 #### Statistics Analysis:
-![Statistics Analysis](/assets/Statistics.png)
+![Statistics Analysis](/assets/statistics.png)
 
 ## Sample Application
 
 To demonstrate the capabilities of minichan-v1, we've included a sample.
-
-[**Login|Register Form**](https://github.com/Leincentes/minichan-grpc/tree/login-register-sample/app)
-<br>
 
 [**End-to-End Chatapp**](https://github.com/Leincentes/minichan-grpc/tree/chatapp-sample/app)
 
