@@ -25,7 +25,5 @@
         "swoole/ide-helper": "dev-master",
         "phpunit/phpunit": "10.5.x-dev"
     },
-    "require": {
-        "minichan-database/minichan-database": "dev-main"
-    }
+    "version": "2.0.0"
 }
