@@ -6,9 +6,14 @@ namespace Minichan\Grpc;
 use Closure;
 use Minichan\Config\Constant;
 use Minichan\Config\Status;
+use Minichan\Exception\AlreadyExistsException;
+use Minichan\Exception\CancelledException;
+use Minichan\Exception\DeadlineExceededException;
 use Minichan\Exception\GRPCException;
 use Minichan\Exception\InvokeException;
+use Minichan\Exception\ServiceException;
 use Minichan\Exception\TransientFailureException;
+use Minichan\Exception\UnimplementedException;
 use Minichan\Middleware\MiddlewareInterface;
 use Minichan\Middleware\ServiceHandler;
 use Minichan\Middleware\StackHandler;
@@ -189,13 +194,19 @@ final class Server
      *
      * @return $this
      * @throws TypeError
+     * @throws AlreadyExistsException
      */
     public function register(string $class): self
     {
         $this->validateServiceClass($class);
 
-        $instance                             = new $class();
-        $service                              = new ServiceContainer($class, $instance);
+        $serviceName = (new $class())->getName();
+        if (isset($this->services[$serviceName])) {
+            throw new AlreadyExistsException("Service {$serviceName} already exists.");
+        }
+
+        $instance = new $class();
+        $service = new ServiceContainer($class, $instance);
         $this->services[$service->getName()] = $service;
 
         return $this;
@@ -208,20 +219,25 @@ final class Server
      *
      * @return $this
      * @throws TypeError
+     * @throws AlreadyExistsException
      */
     public function registerServices(array $serviceClasses): self
     {
         foreach ($serviceClasses as $class) {
             $this->validateServiceClass($class);
 
-            $instance                             = new $class();
-            $service                              = new ServiceContainer($class, $instance);
+            $serviceName = (new $class())->getName();
+            if (isset($this->services[$serviceName])) {
+                throw new AlreadyExistsException("Service {$serviceName} already exists.");
+            }
+
+            $instance = new $class();
+            $service = new ServiceContainer($class, $instance);
             $this->services[$service->getName()] = $service;
         }
 
         return $this;
     }
-
     /**
      * Process a gRPC request.
      *
@@ -241,23 +257,65 @@ final class Server
             Constant::GRPC_STATUS        => Status::UNKNOWN,
             Constant::GRPC_MESSAGE       => '',
         ]);
-
+    
         try {
             $this->validateRequest($rawRequest);
-
+    
             [, $service, $method] = explode('/', $rawRequest->server['request_uri'] ?? '');
-            $service              = '/' . $service;
-            $message              = $rawRequest->getContent() ? substr($rawRequest->getContent(), 5) : '';
-            $request              = new Request($context, $service, $method, $message);
+            $service = '/' . $service;
+            $message = $rawRequest->getContent() ? substr($rawRequest->getContent(), 5) : '';
+            $request = new Request($context, $service, $method, $message);
+    
+            // Simulate a situation where a request might be cancelled
+            if ($this->isRequestCancelled($request)) {
+                throw new CancelledException("Request was cancelled.");
+            }
 
+            // Check if the deadline has been exceeded
+            if ($request->isDeadlineExceeded()) {
+                throw new DeadlineExceededException("Request deadline exceeded.");
+            }
+
+            // parameter validation
+            // $request->validateParam('required_param');
+    
             $response = $this->handler->handle($request);
+        } catch (TransientFailureException $e) {
+            $this->handleTransientFailure($e, $context);
+            $response = new Response($context, '');
+        } catch (UnimplementedException $e) {
+            $this->handleUnimplementedException($e, $context);
+            $response = new Response($context, '');
+            $this->send($response);
+            return;
+        } catch (ServiceException $e) {
+            $this->handleServiceException($e, $context);
+            $response = new Response($context, '');
+            $this->send($response);
+            return;
         } catch (GRPCException $e) {
             $this->handleGRPCException($e, $context);
             $response = new Response($context, '');
         }
-
+    
         $this->send($response);
     }
+    
+    private function isRequestCancelled(Request $request): bool
+    {
+        // Check for a custom header that indicates the request is canceled
+        if (isset($request->getHeaders()['x-request-cancelled']) && $request->getHeaders()['x-request-cancelled'] === 'true') {
+            return true;
+        }
+    
+        // Check for a specific request parameter that might indicate cancellation
+        if (isset($request->getParams()['cancel']) && $request->getParams()['cancel'] === 'true') {
+            return true;
+        }
+    
+        return false;
+    }
+    
 
     /**
      * Initialize worker context.
@@ -369,6 +427,50 @@ final class Server
     {
         Util::log(SWOOLE_LOG_ERROR, $e->getMessage() . ', error code: ' . $e->getCode() . "\n" . $e->getTraceAsString());
         $context = $context->withValue(Constant::GRPC_STATUS, $e->getCode());
+        $context = $context->withValue(Constant::GRPC_MESSAGE, $e->getMessage());
+    }
+     /**
+     * Handle a service-related exception.
+     *
+     * @param ServiceException $e
+     * @param Context          $context
+     *
+     * @return void
+     */
+    private function handleServiceException(ServiceException $e, Context $context): void
+    {
+        Util::log(SWOOLE_LOG_ERROR, $e->getMessage() . ', error code: ' . $e->getCode() . "\n" . $e->getTraceAsString());
+        $context = $context->withValue(Constant::GRPC_STATUS, $e->getCode());
+        $context = $context->withValue(Constant::GRPC_MESSAGE, $e->getMessage());
+    }
+
+    /**
+     * Handle an unimplemented operation exception.
+     *
+     * @param UnimplementedException $e
+     * @param Context                $context
+     *
+     * @return void
+     */
+    private function handleUnimplementedException(UnimplementedException $e, Context $context): void
+    {
+        Util::log(SWOOLE_LOG_ERROR, $e->getMessage() . ', error code: ' . $e->getCode() . "\n" . $e->getTraceAsString());
+        $context = $context->withValue(Constant::GRPC_STATUS, $e->getCode());
+        $context = $context->withValue(Constant::GRPC_MESSAGE, $e->getMessage());
+    }
+    
+     /**
+     * Handle a transient failure exception.
+     *
+     * @param TransientFailureException $e
+     * @param Context                   $context
+     *
+     * @return void
+     */
+    private function handleTransientFailure(TransientFailureException $e, Context $context): void
+    {
+        Util::log(SWOOLE_LOG_WARNING, $e->getMessage() . ', error code: ' . $e->getCode() . "\n" . $e->getTraceAsString());
+        $context = $context->withValue(Constant::GRPC_STATUS, Status::UNKNOWN);
         $context = $context->withValue(Constant::GRPC_MESSAGE, $e->getMessage());
     }
 }
