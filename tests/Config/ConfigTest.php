@@ -4,7 +4,7 @@ use Minichan\Config\Config;
 use Minichan\Middleware\LoggingMiddleware;
 use Minichan\Middleware\TraceMiddleware;
 use PHPUnit\Framework\TestCase;
-use Services\AuthService;
+use Tests\SampleService;
 
 class ConfigTest extends TestCase
 {
@@ -13,7 +13,7 @@ class ConfigTest extends TestCase
     */
     public function testGetServices()
     {
-        $mockedServices = [AuthService::class];
+        $mockedServices = [SampleService::class];
         $configMock = $this->getMockBuilder(\Services\Config\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
