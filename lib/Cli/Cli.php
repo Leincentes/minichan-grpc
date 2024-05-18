@@ -60,9 +60,9 @@ class Cli
         }
         echo "\nUsage Examples:\n";
         echo "---------------\n";
-        echo "  php minichan.php serve\n";
-        echo "  php minichan.php check:services\n";
-        echo "\nUse 'php minichan.php help' to display this help message.\n";
+        echo "  php minichan serve\n";
+        echo "  php minichan check:services\n";
+        echo "\nUse 'php minichan help' to display this help message.\n";
     }
 
     /**
