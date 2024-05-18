@@ -1,5 +1,5 @@
-#!/usr/bin/php
 <?php
+
 declare(strict_types=1);
 
 namespace Minichan\Cli;
@@ -53,16 +53,55 @@ class Cli
         echo "MiniChan CLI\n";
         echo "============\n";
         echo "Version: " . self::VERSION . "\n\n";
-        echo "Available commands:\n";
-        echo "-------------------\n";
+
+        // Commands organized by category
+        $categories = [
+            'Serve' => [],
+            'Check' => [],
+            'Generate' => [],
+        ];
+
+        // Organize commands into categories
         foreach ($this->commands as $command) {
-            printf("  %-20s %s\n", $command->signature, $command->description);
+            $category = $this->categorizeCommand($command->signature);
+            $categories[$category][] = $command;
         }
+
+        // Display commands grouped by category
+        foreach ($categories as $category => $commands) {
+            if (!empty($commands)) {
+                echo "\n$category:\n";
+                echo "-------------------\n";
+                foreach ($commands as $command) {
+                    printf("  %-20s %s\n", $command->signature, $command->description);
+                }
+            }
+        }
+
         echo "\nUsage Examples:\n";
         echo "---------------\n";
         echo "  php minichan serve\n";
         echo "  php minichan check:services\n";
         echo "\nUse 'php minichan help' to display this help message.\n";
+    }
+
+    /**
+     * Categorize a command based on its signature.
+     *
+     * @param string $signature
+     * @return string
+     */
+    protected function categorizeCommand(string $signature): string
+    {
+        if (strpos($signature, 'check') !== false) {
+            return 'Check';
+        } elseif (strpos($signature, 'generate') !== false) {
+            return 'Generate';
+        } elseif (strpos($signature, 'serve') !== false) {
+            return 'Serve';
+        } else {
+            return 'Other';
+        }
     }
 
     /**

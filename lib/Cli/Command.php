@@ -1,5 +1,5 @@
-#!/usr/bin/php
 <?php
+
 declare(strict_types=1);
 
 namespace Minichan\Cli;
@@ -56,3 +56,4 @@ class Command
         return $this->description;
     }
 }
+

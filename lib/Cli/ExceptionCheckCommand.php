@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace Minichan\Cli;
 
@@ -51,3 +50,5 @@ class ExceptionCheckCommand extends Command
         printf("+-%-30s-+-%-15s-+\n", str_repeat('-', 30), str_repeat('-', 15));
     }
 }
+
+
