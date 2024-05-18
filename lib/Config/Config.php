@@ -35,6 +35,7 @@ class Config
         return [
             new LoggingMiddleware(),
             new TraceMiddleware(),
+            ...\Services\Config\Config::registerMiddlewares(),
         ];
     }
 
