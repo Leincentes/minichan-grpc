@@ -11,5 +11,7 @@ $cli->addCommand(new \Minichan\Cli\MiddlewareCheckCommand());
 $cli->addCommand(new \Minichan\Cli\ExceptionCheckCommand());
 
 $cli->addCommand(new \Minichan\Cli\ServicesCommand());
+$cli->addCommand(new \Minichan\Cli\MiddlewareCommand());
+$cli->addCommand(new \Minichan\Cli\ExceptionCommand());
 
 $cli->run($argv);
