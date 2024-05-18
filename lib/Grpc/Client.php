@@ -5,6 +5,10 @@ namespace Minichan\Grpc;
 
 use Minichan\Config\Constant;
 use Minichan\Exception\ClientException;
+use Minichan\Exception\DeadlineExceededException;
+use Minichan\Exception\CancelledException;
+use Minichan\Exception\UnavailableException;
+use Minichan\Exception\TransientFailureException;
 use Swoole\Coroutine;
 
 class Client implements ClientInterface
@@ -115,7 +119,7 @@ class Client implements ClientInterface
             Util::usleep(10000);
         }
 
-        return false;
+        throw new TransientFailureException("Failed to send message after {$this->settings['max_retries']} retries.");
     }
 
     /**
@@ -128,7 +132,19 @@ class Client implements ClientInterface
      */
     public function recv($streamId, $timeout = -1)
     {
-        return $this->streams[$streamId][0]->pop($timeout);
+        $result = $this->streams[$streamId][0]->pop($timeout);
+        
+        if ($result === false) {
+            if ($this->client->errCode == 110) { // ETIMEDOUT
+                throw new DeadlineExceededException("Deadline exceeded for stream $streamId");
+            } elseif ($this->client->errCode == 111) { // ECONNREFUSED
+                throw new UnavailableException("Service unavailable for stream $streamId");
+            } elseif ($this->client->errCode == 104) { // ECONNRESET
+                throw new CancelledException("Request cancelled for stream $streamId");
+            }
+        }
+        
+        return $result;
     }
 
     /**
@@ -230,8 +246,7 @@ class Client implements ClientInterface
 
         return [0, null, false, null];
     }
-    
-    
+
     /**
      * Set the HTTP client for the gRPC client.
      *
