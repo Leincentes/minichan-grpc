@@ -52,6 +52,9 @@ class ServicesCommand extends Command
     protected function showUsage()
     {
         echo "Usage: generate:services <ServicesName> <Interface|Class>\n";
+        echo "Sample:\n";
+        echo "--------\n";
+        echo "php minichan generate:services SampleService class\n";
     }
 
     /**
