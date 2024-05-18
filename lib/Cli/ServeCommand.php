@@ -7,7 +7,7 @@ class ServeCommand extends Command
 {
     public function __construct()
     {
-        parent::__construct('serve', ' ---------------- run the server');
+        parent::__construct('serve', 'Run the server');
     }
     public function handle($args)
     {

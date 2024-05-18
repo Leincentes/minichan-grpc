@@ -6,6 +6,8 @@ namespace Minichan\Cli;
 
 class Cli
 {
+    const VERSION = '2.0';
+
     /** @var Command[] */
     protected $commands = [];
 
@@ -48,12 +50,19 @@ class Cli
      */
     protected function displayHelp()
     {
+        echo "MiniChan CLI\n";
+        echo "============\n";
+        echo "Version: " . self::VERSION . "\n\n";
         echo "Available commands:\n";
+        echo "-------------------\n";
         foreach ($this->commands as $command) {
-            echo "  " . $command->signature . "\t" . $command->description . "\n";
+            printf("  %-20s %s\n", $command->signature, $command->description);
         }
-        // echo "\nExample:\n \nphp minichan generate:config MyClass Class\nphp minichan generate:config MyInterface Interface\nphp minichan serve\n";
-        echo "\nExample:\nphp minichan serve\n";
+        echo "\nUsage Examples:\n";
+        echo "---------------\n";
+        echo "  php minichan.php serve\n";
+        echo "  php minichan.php check:services\n";
+        echo "\nUse 'php minichan.php help' to display this help message.\n";
     }
 
     /**
