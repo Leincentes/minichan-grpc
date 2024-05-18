@@ -102,4 +102,37 @@ final class Request implements MessageInterface
     {
         return $this->message;
     }
+    
+    public function getHeaders(): array
+    {
+        return $this->context->getValue(\Swoole\Http\Request::class)->header ?? [];
+    }
+
+    public function getParams(): array
+    {
+        return $this->context->getValue(\Swoole\Http\Request::class)->get ?? [];
+    }
+    public function getDeadline(): ?int
+    {
+        $headers = $this->getHeaders();
+        return isset($headers['x-deadline']) ? (int) $headers['x-deadline'] : null;
+    }
+
+    public function isDeadlineExceeded(): bool
+    {
+        $deadline = $this->getDeadline();
+        return $deadline !== null && time() > $deadline;
+    }
+    public function getParam(string $key): ?string
+    {
+        return $this->getParams()[$key] ?? null;
+    }
+
+    public function validateParam(string $key): void
+    {
+        if (empty($this->getParam($key))) {
+            throw new \Minichan\Exception\InvalidArgumentException("Invalid argument: $key");
+        }
+    }
+
 }
