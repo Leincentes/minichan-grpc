@@ -15,6 +15,7 @@ $cli->addCommand(new \Minichan\Cli\MiddlewareCommand());
 $cli->addCommand(new \Minichan\Cli\ExceptionCommand());
 
 $cli->addCommand(new \Minichan\Cli\ServicesRegisterCommand());
+$cli->addCommand(new \Minichan\Cli\ServicesUnregisterCommand());
 
 $cli->addCommand(new \Minichan\Cli\ProtoCommand());
 
