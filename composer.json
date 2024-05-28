@@ -21,8 +21,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.0",
-        "swoole": ">=5.1.2"
+        "php": ">=8.0"
     },
     "require-dev": {
         "google/protobuf": "dev-master",
