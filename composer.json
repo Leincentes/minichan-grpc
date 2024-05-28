@@ -19,7 +19,7 @@
         }
     
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=8.0"
     },
@@ -27,6 +27,5 @@
         "google/protobuf": "dev-master",
         "swoole/ide-helper": "dev-master",
         "phpunit/phpunit": "10.5.x-dev"
-    },
-    "version": "2.0.0"
+    }
 }
