@@ -1,5 +1,5 @@
 {
-    "name": "minichan/minichan",
+    "name": "minichan-grpc/minichan-grpc",
     "description": "A grpc server library.",
     "type": "library",
     "license": "MIT",
