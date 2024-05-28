@@ -59,6 +59,8 @@ class Cli
             'Serve' => [],
             'Check' => [],
             'Generate' => [],
+            'Proto' => [],
+            'Register' => [],
         ];
 
         // Organize commands into categories
@@ -99,6 +101,10 @@ class Cli
             return 'Generate';
         } elseif (strpos($signature, 'serve') !== false) {
             return 'Serve';
+        } elseif (strpos($signature, 'proto') !== false) {
+            return 'Proto';
+        } elseif (strpos($signature, 'register') !== false) {
+            return 'Register';
         } else {
             return 'Other';
         }

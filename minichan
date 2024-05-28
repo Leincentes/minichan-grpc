@@ -10,8 +10,12 @@ $cli->addCommand(new \Minichan\Cli\ServicesCheckCommand());
 $cli->addCommand(new \Minichan\Cli\MiddlewareCheckCommand());
 $cli->addCommand(new \Minichan\Cli\ExceptionCheckCommand());
 
-$cli->addCommand(new \Minichan\Cli\ServicesCommand());
+$cli->addCommand(new \Minichan\Cli\ServicesGenerateCommand());
 $cli->addCommand(new \Minichan\Cli\MiddlewareCommand());
 $cli->addCommand(new \Minichan\Cli\ExceptionCommand());
+
+$cli->addCommand(new \Minichan\Cli\ServicesRegisterCommand());
+
+$cli->addCommand(new \Minichan\Cli\ProtoCommand());
 
 $cli->run($argv);
