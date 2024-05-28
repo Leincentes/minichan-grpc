@@ -19,8 +19,7 @@
         }
     
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "require-dev": {
         "google/protobuf": "dev-master",
         "swoole/ide-helper": "dev-master",
