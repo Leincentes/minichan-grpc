@@ -50,7 +50,7 @@ class Cli
      */
     protected function displayHelp()
     {
-        echo "MiniChan CLI\n";
+        echo "Minichan CLI\n";
         echo "============\n";
         echo "Version: " . self::VERSION . "\n\n";
 
