@@ -103,4 +103,7 @@ else
     install_package protobuf-compiler
 fi
 
+# Check for inotify-tools
+check_and_install inotify-tools
+
 echo "All dependencies checked and necessary installations completed."
