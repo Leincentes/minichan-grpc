@@ -8,9 +8,9 @@
 
 minichan-v1 is designed to simplify the development of gRPC-based applications in PHP. It provides a comprehensive set of tools, including a protoc code generator, server, and client components, all powered by Swoole coroutines. With minichan-v1, developers can build efficient and scalable gRPC services with ease.
 
-## Blog
+<!-- ## Blog
 
-[**minichan/v1**](https://minichanv-1.blogspot.com/)
+[**minichan/v1**](https://minichanv-1.blogspot.com/) -->
 
 ## Dedicated Documentation
 
