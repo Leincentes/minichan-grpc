@@ -32,12 +32,6 @@ We've included JMeter test cases to ensure the performance and reliability of mi
 #### Statistics Analysis:
 ![Statistics Analysis](/assets/statistics.png)
 
-## Sample Application
-
-To demonstrate the capabilities of minichan-v1, we've included a sample.
-
-[**End-to-End Chatapp**](https://github.com/Leincentes/minichan-grpc/tree/chatapp-sample/app)
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
